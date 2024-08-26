@@ -1,8 +1,33 @@
 const express = require('express')
 const router = express.Router()
 
+/*  Storage substitution   */
+const emails = new Set();
+
 router.post('/', (req, res) => {
-    res.send("It's a signup stub");
+
+    const userData = {
+        email: req.body.email,
+        password: req.body.password,
+        phone: req.body.phone,
+    };
+
+    const emailExists = emails.has(userData.email);
+
+    try {
+        if (emailExists) {
+            return res.status(409).json({error: "User with this email already exists"});
+        }
+
+        emails.add(userData.email);
+
+        /*  To add: email verification  */
+
+        res.status(201).json({message: "User registered successfully"})
+
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error"})
+    }
 });
 
 router.post('/verifyCode', (req, res) => {

@@ -12,6 +12,8 @@ app.listen(port, () => {
     console.log(`The server is listening on port ${port}`);
 });
 
+app.use(express.json());
+
 app.use('/signup', signup);
 app.use('/login', login);
 app.use('/logout', logout);
