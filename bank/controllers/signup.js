@@ -7,7 +7,7 @@ const createUser = async (req, res) => {
 
     const userData = {
         email: req.body.email,
-        password: await encrypt(req.body.password),
+        hashedPassword: await encrypt(req.body.password),
         phone: req.body.phone,
         isActive: false,
     };
@@ -38,8 +38,12 @@ const verifyCode = (req, res) => {
     const code = req.body.code;
 
     try {
-        const isCorrectCode = users.has(email) && (users.get(email).code === code);
+        const curUser = users.get(email);
+        const isCorrectCode = curUser && (curUser.code === code);
         if (isCorrectCode) {
+            curUser.isActive = true;
+            users.set(email, curUser);
+
             res.status(200).json({message: "Correct code"});
         } else {
             res.status(401).json({ error: "Incorrect code"});
