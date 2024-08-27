@@ -9,6 +9,7 @@
   "author": "Olga Liberzon",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "express": "^4.19.2"
   }
 }

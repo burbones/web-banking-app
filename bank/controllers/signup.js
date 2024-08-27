@@ -1,14 +1,18 @@
 /*  Storage substitution   */
 const { users } = require('../data.js');
 
-const createUser = (req, res) => {
+const bcrypt = require('bcrypt');
+
+const createUser = async (req, res) => {
 
     const userData = {
         email: req.body.email,
-        password: req.body.password,
+        password: await encrypt(req.body.password),
         phone: req.body.phone,
         isActive: false,
     };
+
+    console.log(userData);
 
     const emailExists = users.has(userData.email);
 
@@ -47,6 +51,13 @@ const verifyCode = (req, res) => {
 
 const generateCode = () => {
     return ("" + Math.random()).substring(2, 8);
+}
+
+const encrypt = async (str) => {
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+
+    return await bcrypt.hash(str, salt);
 }
 
 module.exports = {
