@@ -1,5 +1,5 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
 router.get('/', (req, res) => {
     const balance = (Math.random() * 100).toFixed(2);
@@ -7,4 +7,4 @@ router.get('/', (req, res) => {
     res.send(`Your balance is: ${balance}`);
 });
 
-module.exports = router
+module.exports = router;

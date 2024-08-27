@@ -8,14 +8,16 @@ const transaction = require('./routes/transaction');
 const app = express();
 const port = 3000;
 
+const baseURL = "/api/v1";
+
 app.listen(port, () => {
     console.log(`The server is listening on port ${port}`);
 });
 
 app.use(express.json());
 
-app.use('/signup', signup);
-app.use('/login', login);
-app.use('/logout', logout);
-app.use('/dashboard', dashboard);
-app.use('/transaction', transaction);
+app.use(baseURL + "/signup", signup);
+app.use(baseURL + "/login", login);
+app.use(baseURL + "/logout", logout);
+app.use(baseURL + "/dashboard", dashboard);
+app.use(baseURL + "/transaction", transaction);
