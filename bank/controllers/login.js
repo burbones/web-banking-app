@@ -3,7 +3,7 @@ const { users } = require('../data.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-const secretKey = require('crypto').randomBytes(32).toString('hex');
+const { secretKey } = require('../constants/constants.js');
 const timeToExpireJWT = "1h";
 
 const login = async (req, res) => {

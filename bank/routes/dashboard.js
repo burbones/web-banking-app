@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    const balance = (Math.random() * 100).toFixed(2);
+const { getDashboard } = require('../controllers/dashboard.js');
+const { verifyToken } = require('../middlewares/jwt.js');
 
-    res.send(`Your balance is: ${balance}`);
-});
+router.get('/', verifyToken, getDashboard);
 
 module.exports = router;
