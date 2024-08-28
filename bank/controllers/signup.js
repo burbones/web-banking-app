@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 
 /*  Storage substitution   */
 const { users } = require('../data.js');
@@ -27,12 +28,36 @@ const createUser = async (req, res) => {
         console.log(userData.code);
         users.set(userData.email, userData);
 
+        sendEmail(userData.email, userData.code);
+
         res.status(201).json({message: "User registered successfully"})
 
     } catch (error) {
         res.status(500).json({ error: "Internal server error"})
     }
 };
+
+const myEmail = "fs154notify@gmail.com";
+const myPassword = "lbbpwvrlvkczfdzd";
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: myEmail,
+        pass: myPassword
+    }
+})
+
+const sendEmail = (email, content) => {
+    const mailOptions = {
+        from: myEmail,
+        to: email,
+        subject: "Verification code from test project",
+        text: content
+    };
+    
+    transporter.sendMail(mailOptions);
+}
 
 const verifyCode = (req, res) => {
 
