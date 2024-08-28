@@ -1,8 +1,10 @@
-const getDashboard = (req, res) => {
-    console.log(req.email);
-    const balance = (Math.random() * 100).toFixed(2);
+const { users } = require('../data.js');
 
-    res.send(`Your balance is: ${balance}`);
+const getDashboard = (req, res) => {
+    res.status(200).json({
+        balance: users.get(req.email).balance,
+        transactions: []
+    });
 }
 
 module.exports = {

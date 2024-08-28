@@ -1,18 +1,20 @@
+const bcrypt = require('bcrypt');
+
 /*  Storage substitution   */
 const { users } = require('../data.js');
 
-const bcrypt = require('bcrypt');
+const { getRandomStartBalance } = require('../constants/constants.js');
 
 const createUser = async (req, res) => {
+    const balance = getRandomStartBalance();
 
     const userData = {
         email: req.body.email,
         hashedPassword: await encrypt(req.body.password),
         phone: req.body.phone,
+        balance: +balance,
         isActive: false,
     };
-
-    console.log(userData);
 
     const emailExists = users.has(userData.email);
 
