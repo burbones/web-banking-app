@@ -10,7 +10,7 @@ const doTransaction = (req, res) => {
             }
 
             const userToSend = req.body.user;
-            if (!users.has(userToSend)) {
+            if (!users.has(userToSend) || !users.get(userToSend).isActive) {
                 return res.status(404).json( { error: "No such user" });
             }
 
