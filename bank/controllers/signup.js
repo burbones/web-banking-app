@@ -14,7 +14,7 @@ const createUser = async (req, res) => {
         const newUserFull = await newUser.save();
         console.log(newUserFull);
 
-        sendEmail(userData.email, userData.code);
+        sendEmail(newUserFull.email, "" + newUserFull.code);
 
         res.status(201).json({message: "User registered successfully"})
 
@@ -22,6 +22,7 @@ const createUser = async (req, res) => {
         if (error.code == 11000) {
             return res.status(409).json({error: "User with this email already exists"});
         }
+        console.log(error);
         res.status(500).json({ error: "Internal server error"})
     }
 };
