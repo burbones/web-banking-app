@@ -1,14 +1,15 @@
 /*  Storage substitution   */
-const { users } = require('../data.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
+const User = require('../models/User.js');
 
 const { secretKey } = require('../constants/constants.js');
 const timeToExpireJWT = "1h";
 
 const login = async (req, res) => {
     try {
-        const curUser = users.get(req.body.email);
+        const curUser = await User.findOne({ email: req.body.email });
 
         if (!curUser || !curUser.isActive) {
             return res.status(401).json({error: "Invalid credentials"});
@@ -23,6 +24,7 @@ const login = async (req, res) => {
         }
 
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: "Internal server error"});
     }
 }
