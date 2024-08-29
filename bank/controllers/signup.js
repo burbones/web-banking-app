@@ -1,34 +1,27 @@
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
-/*  Storage substitution   */
-const { users } = require('../data.js');
-
-const { getRandomStartBalance } = require('../constants/constants.js');
+const User = require('../models/User.js');
 
 const createUser = async (req, res) => {
-    const balance = getRandomStartBalance();
-
-    const userData = {
+    const newUser = new User({
         email: req.body.email,
         hashedPassword: await encrypt(req.body.password),
         phone: req.body.phone,
-        balance: +balance,
-        isActive: false,
-    };
-
-    const emailExists = users.has(userData.email);
+    });
 
     try {
-        if (emailExists) {
+        const newUserFull = await newUser.save();
+        console.log(newUserFull);
+        
+        /*if (emailExists) {
             return res.status(409).json({error: "User with this email already exists"});
         }
 
-        userData.code = generateCode();
         console.log(userData.code);
         users.set(userData.email, userData);
 
-        sendEmail(userData.email, userData.code);
+        sendEmail(userData.email, userData.code);*/
 
         res.status(201).json({message: "User registered successfully"})
 
@@ -79,10 +72,6 @@ const verifyCode = (req, res) => {
         res.status(500).json({ error: "Internal server error"});
     }
 };
-
-const generateCode = () => {
-    return ("" + Math.random()).substring(2, 8);
-}
 
 const encrypt = async (str) => {
     const saltRounds = 10;

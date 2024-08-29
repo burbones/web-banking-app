@@ -1,7 +1,7 @@
 const { Ajv } = require("ajv");
 const ajv = new Ajv();
 
-const transactionSchema = {
+const transactionRequestSchema = {
     type: "object",
     properties: {
         user: {type: "string"},
@@ -12,7 +12,7 @@ const transactionSchema = {
 };
 
 const checkTransactionBody = (req, res, next) => {
-    if (!ajv.validate(transactionSchema, req.body)) {
+    if (!ajv.validate(transactionRequestSchema, req.body)) {
         return res.status(400).json({ error: "Incorrect request data" });
     }
     next();
