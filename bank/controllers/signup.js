@@ -13,19 +13,15 @@ const createUser = async (req, res) => {
     try {
         const newUserFull = await newUser.save();
         console.log(newUserFull);
-        
-        /*if (emailExists) {
-            return res.status(409).json({error: "User with this email already exists"});
-        }
 
-        console.log(userData.code);
-        users.set(userData.email, userData);
-
-        sendEmail(userData.email, userData.code);*/
+        sendEmail(userData.email, userData.code);
 
         res.status(201).json({message: "User registered successfully"})
 
     } catch (error) {
+        if (error.code == 11000) {
+            return res.status(409).json({error: "User with this email already exists"});
+        }
         res.status(500).json({ error: "Internal server error"})
     }
 };
@@ -52,20 +48,22 @@ const sendEmail = (email, content) => {
     transporter.sendMail(mailOptions);
 }
 
-const verifyCode = (req, res) => {
+const verifyCode = async (req, res) => {
 
     const email = req.body.email;
     const code = req.body.code;
 
     try {
-        const curUser = users.get(email);
+        const curUser = await User.findOne({ email: email });
+
         const isCorrectCode = curUser && (curUser.code === code);
         if (isCorrectCode) {
             curUser.isActive = true;
-            users.set(email, curUser);
+            await curUser.save();
 
             res.status(200).json({message: "Correct code"});
         } else {
+            await User.deleteOne({ _id: curUser._id});
             res.status(401).json({ error: "Incorrect code"});
         }
     } catch (error) {

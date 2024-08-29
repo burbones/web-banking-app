@@ -1,12 +1,14 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
+
+const { checkRegistrationBody } = require('../middlewares/registration.js');
 
 const {
     createUser,
     verifyCode
 } = require('../controllers/signup.js');
 
-router.post('/', createUser);
+router.post('/', checkRegistrationBody, createUser);
 
 router.post('/verifyCode', verifyCode);
 
