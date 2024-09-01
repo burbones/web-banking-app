@@ -1,10 +1,14 @@
 const jwt = require('jsonwebtoken');
 const { secretKey } = require('../constants/constants.js');
 
-const verifyToken = (req, res, next) => {
+const Blacklist = require('../models/Blacklist.js');
+
+const verifyToken = async (req, res, next) => {
     let token = req.header('Authorization');
     
-    if (!token) {
+    const isBlacklisted = await Blacklist.findOne({token: token});
+
+    if (!token || isBlacklisted) {
         return res.status(401).json({ error: "Unauthorized" });
     }
 

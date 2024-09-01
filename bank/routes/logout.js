@@ -1,8 +1,8 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-router.delete('/', (req, res) => {
-    res.send("It's a logout stub");
-});
+const { logout } = require('../controllers/logout');
 
-module.exports = router
+router.delete('/', logout);
+
+module.exports = router;
