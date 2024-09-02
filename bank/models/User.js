@@ -34,5 +34,10 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+userSchema.index(
+    {creationTime: 1},
+    {expireAfterSeconds: 60, partialFilterExpression: {isActive: false}},
+);
+
 const User = mongoose.model('User', userSchema);
 module.exports = User;

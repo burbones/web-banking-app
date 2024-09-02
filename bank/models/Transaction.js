@@ -16,9 +16,11 @@ const transactionSchema = new mongoose.Schema({
     issuer: {
         type: String,
         required: true,
+        index: true,
     },
     acquirer: {
         type: String,
+        index: true,
     }
 });
 
