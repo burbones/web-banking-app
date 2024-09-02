@@ -6,7 +6,7 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - 3000:3000
+      - $SERVER_PORT:$SERVER_DOCKER_PORT
     depends_on:
       - mongodb
     tty: true
@@ -15,11 +15,9 @@ services:
     image: mongodb/mongodb-community-server:6.0-ubi8
     env_file: ./.env
     environment:
-      - MONGODB_INITDB_ROOT_USERNAME=user
-      - MONGODB_INITDB_ROOT_PASSWORD=pass
+      - MONGODB_INITDB_ROOT_USERNAME=$MONGODB_USER
+      - MONGODB_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
     ports:
-      - 4321:27017
+      - $MONGODB_PORT:$MONGODB_DOCKER_PORT
     volumes:
-      - type: bind
-        source: ./data
-        target: /data/db
+      - ./data:/data/db
