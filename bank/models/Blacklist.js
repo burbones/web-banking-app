@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const BlacklistSchema = new mongoose.Schema(
+const blacklistSchema = new mongoose.Schema(
     {
         token: {
             type: String,
@@ -10,6 +10,11 @@ const BlacklistSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const Blacklist = mongoose.model('Blacklist', BlacklistSchema);
+blacklistSchema.index(
+    {createdAt: 1},
+    {expireAfterSeconds: 3600},
+);
+
+const Blacklist = mongoose.model('Blacklist', blacklistSchema);
 
 module.exports = Blacklist;
