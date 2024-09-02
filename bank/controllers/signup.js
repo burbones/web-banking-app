@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
 const User = require('../models/User.js');
+const Errors = require('../constants/errors.js');
 
 const createUser = async (req, res) => {
     const newUser = new User({
@@ -20,10 +21,10 @@ const createUser = async (req, res) => {
 
     } catch (error) {
         if (error.code == 11000) {
-            return res.status(409).json({error: "User with this email already exists"});
+            return res.status(409).json({error: Errors.USER_EXISTS});
         }
         console.log(error);
-        res.status(500).json({ error: "Internal server error"})
+        res.status(500).json({error: Errors.SERVER_ERROR})
     }
 };
 
@@ -65,10 +66,10 @@ const verifyCode = async (req, res) => {
             res.status(200).json({message: "Correct code"});
         } else {
             await User.deleteOne({ _id: curUser._id});
-            res.status(401).json({ error: "Incorrect code"});
+            res.status(401).json({ error: Errors.INCORRECT_DATA});
         }
     } catch (error) {
-        res.status(500).json({ error: "Internal server error"});
+        res.status(500).json({ error: Errors.SERVER_ERROR});
     }
 };
 

@@ -1,3 +1,4 @@
+const Errors = require("../constants/errors.js");
 const Blacklist = require("../models/Blacklist.js");
 
 const logout = async (req, res) => {
@@ -16,7 +17,7 @@ const logout = async (req, res) => {
     
         res.status(200).json({ message: "You are logged out!" });
     } catch (error) {
-        res.status(500).json({ error: "Internal server error"});
+        res.status(500).json({ error: Errors.SERVER_ERROR});
     }
 
 };

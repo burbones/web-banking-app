@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const signup = require('./routes/signup');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
@@ -7,9 +8,8 @@ const transaction = require('./routes/transaction');
 const connectDB = require('./db_connection');
 
 const app = express();
-const SERVER_PORT = 3000;
-const DB_PORT = 27017;
-const MONGO_URI = "mongodb://localhost:" + DB_PORT + "/bank";
+const serverPort = process.env.SERVER_PORT || 3000;
+const mongoURI = process.env.MONGO_URI;
 
 const baseURL = "/api/v1";
 
@@ -23,11 +23,11 @@ app.use(baseURL + "/transaction", transaction);
 
 const start = async () => {
     try {
-        await connectDB(MONGO_URI);
+        await connectDB(mongoURI);
         console.log("MongoDB is now running");
 
-        app.listen(SERVER_PORT, () => {
-            console.log(`The server is listening on port ${SERVER_PORT}`);
+        app.listen(serverPort, () => {
+            console.log(`The server is listening on port ${serverPort}`);
         });
     } catch (error) {
         console.log(error);

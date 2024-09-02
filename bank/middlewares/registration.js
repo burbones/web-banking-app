@@ -1,4 +1,5 @@
 const { Ajv } = require("ajv");
+const Errors = require("../constants/errors");
 const ajv = new Ajv();
 
 const registrationRequestSchema = {
@@ -13,7 +14,7 @@ const registrationRequestSchema = {
 
 const checkRegistrationBody = (req, res, next) => {
     if (!ajv.validate(registrationRequestSchema, req.body)) {
-        return res.status(400).json({ error: "Incorrect request data" });
+        return res.status(400).json({ error: Errors.INCORRECT_DATA });
     }
     next();
 }

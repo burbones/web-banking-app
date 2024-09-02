@@ -1,5 +1,6 @@
 const User = require('../models/User.js');
 const Transaction = require('../models/Transaction.js');
+const Errors = require('../constants/errors.js');
 
 const doTransaction = async (req, res) => {
     try {
@@ -8,14 +9,14 @@ const doTransaction = async (req, res) => {
         if (req.body.type == "send") {
             const curBalance = issuer.balance;
             if (req.body.amount > curBalance) {
-                return res.status(400).json( { error: "Not enough money" });
+                return res.status(400).json( { error: Errors.NOT_ENOUGH_MONEY });
             }
 
             const acquirerEmail = req.body.user;
             const acquirer = await User.findOne({ email: acquirerEmail });
 
             if (!acquirer || !acquirer.isActive) {
-                return res.status(404).json( { error: "No such user" });
+                return res.status(404).json( { error: Errors.NO_USER });
             }
 
             await execute(issuer, acquirer, req.body);
@@ -23,12 +24,12 @@ const doTransaction = async (req, res) => {
             res.status(200).json( { message: "Successful transaction" });
 
         } else {
-            return res.status(400).json( { error: "Incorrect data" });
+            return res.status(400).json( { error: Errors.INCORRECT_DATA });
         }
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: "Internal server error"});
+        res.status(500).json({ error: Errors.SERVER_ERROR });
     }
 }
 

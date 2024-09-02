@@ -1,4 +1,5 @@
 const { Ajv } = require("ajv");
+const Errors = require("../constants/errors");
 const ajv = new Ajv();
 
 const transactionRequestSchema = {
@@ -13,7 +14,7 @@ const transactionRequestSchema = {
 
 const checkTransactionBody = (req, res, next) => {
     if (!ajv.validate(transactionRequestSchema, req.body)) {
-        return res.status(400).json({ error: "Incorrect request data" });
+        return res.status(400).json({ error: Errors.INCORRECT_DATA });
     }
     next();
 }
