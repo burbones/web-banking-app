@@ -1,0 +1,25 @@
+services:
+  server:
+    build:
+      context: .
+    env_file: ./.env
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+    tty: true
+  
+  mongodb:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    env_file: ./.env
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=user
+      - MONGODB_INITDB_ROOT_PASSWORD=pass
+    ports:
+      - 4321:27017
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data/db
