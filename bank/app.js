@@ -5,7 +5,10 @@ const login = require('./routes/login');
 const logout = require('./routes/logout');
 const dashboard = require('./routes/dashboard');
 const transaction = require('./routes/transaction');
+const fox = require('./routes/fox');
 const connectDB = require('./db_connection');
+const initAuthorizationSchema = require('./create-schema');
+const addAdmin = require('./add-admin');
 
 const app = express();
 const serverPort = process.env.SERVER_PORT || 3000;
@@ -20,11 +23,15 @@ app.use(baseURL + "/login", login);
 app.use(baseURL + "/logout", logout);
 app.use(baseURL + "/dashboard", dashboard);
 app.use(baseURL + "/transaction", transaction);
+app.use(baseURL + "/fox", fox);
 
 const start = async () => {
     try {
         await connectDB(mongoURI);
         console.log("MongoDB is now running");
+
+        console.log(await initAuthorizationSchema());
+        console.log(await addAdmin());
 
         app.listen(serverPort, () => {
             console.log(`The server is listening on port ${serverPort}`);

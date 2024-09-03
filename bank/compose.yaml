@@ -21,3 +21,10 @@ services:
       - $MONGODB_PORT:$MONGODB_DOCKER_PORT
     volumes:
       - ./data:/data/db
+  
+  permify:
+    image: ghcr.io/permify/permify
+    env_file: ./.env
+    ports:
+      - $PERMIFY_API_PORT:$PERMIFY_API_PORT
+      - $PERMIFY_GRPC_PORT:$PERMIFY_GRPC_PORT

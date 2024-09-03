@@ -19,6 +19,8 @@ USER node
 
 COPY . .
 
+RUN npm config set @buf:registry https://buf.build/gen/npm/v1/
+
 EXPOSE 3000
 
 CMD node app.js
