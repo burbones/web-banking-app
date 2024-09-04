@@ -1,4 +1,5 @@
 const Errors = {
+    FORBIDDEN: "Authorization check failed",
     INVALID_CREDENTIALS: "Invalid credentials",
     INCORRECT_DATA: "Incorrect data",
     NOT_ENOUGH_MONEY: "Not enough money",

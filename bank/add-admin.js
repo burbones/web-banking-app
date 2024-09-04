@@ -4,8 +4,6 @@ const client = new permify.grpc.newClient({
     endpoint: `${process.env.PERMIFY_HOST}:${process.env.PERMIFY_GRPC_PORT}`,
 });
 
-let snapToken = undefined;
-
 const addAdmin = async () => {
     // Create and set the RelationshipWriteRequest
     let relationshipWriteRequest = new permify.grpc.payload.DataWriteRequest();
@@ -48,10 +46,7 @@ const addAdmin = async () => {
 
     relationshipWriteRequest.setTuplesList(tupleList);
 
-    const res = await client.data.write(relationshipWriteRequest);
-    console.log("Admin written!");
-    return res.u[0];
-
+    await client.data.write(relationshipWriteRequest);
 }
 
 module.exports = addAdmin;

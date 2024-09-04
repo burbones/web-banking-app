@@ -36,47 +36,14 @@ const checkPermissions = (permissionType) => {
             permissionCheckRequest.setSubject(permissionCheckRequestSubject);
 
             // Perform the permission check
-            client.permission.check(permissionCheckRequest).then((response) => {
-                if (response.u[0] === permify.grpc.base.CheckResult.CHECK_RESULT_ALLOWED) {
-                    console.log("RESULT_ALLOWED")
-                } else {
-                    console.log(response);
-                    console.log("RESULT_DENIED")
-                }
-            });
-
-            // Prepare data for Permify check request
-            // const checkRes = await client.permission.check({
-            //     tenantId: 't1',
-            //     metadata: {
-            //         schemaVersion: '',
-            //         snapToken: '',
-            //         depth: 20,
-            //     },
-            //     entity: {
-            //         type: 'organization',
-            //         id: "1",
-            //     },
-            //     permission: permTypeString, // Use the converted permissionType
-            //     subject: {
-            //         type: 'user',
-            //         id: req.email,
-            //     },
-            // });
-
-            // if (checkRes.can === 1) {
-            //     // If user is authorized
-            //     req.authorized = 'authorized';
-            //     console.log("authorized!");
-            // } else {
-            //     // If user is not authorized
-            //     req.authorized = 'not authorized';
-            //     console.log("not authorized!");
-            // }
-            next();
+            const response = await client.permission.check(permissionCheckRequest);
+            if (response.getCan() !== permify.grpc.base.CheckResult.CHECK_RESULT_ALLOWED) {
+                res.status(403).json( {error: Errors.FORBIDDEN} );
+            } else {
+                next();
+            }
         } catch (err) {
-            console.log(err);
-            res.status(500).json( {error: Errors.SERVER_ERROR});
+            res.status(500).json( {error: Errors.SERVER_ERROR} );
         }
     }
 }

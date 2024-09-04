@@ -30,8 +30,9 @@ const start = async () => {
         await connectDB(mongoURI);
         console.log("MongoDB is now running");
 
-        console.log(await initAuthorizationSchema());
-        console.log(await addAdmin());
+        await initAuthorizationSchema();
+        await addAdmin();
+        console.log("Authorization system is on");
 
         app.listen(serverPort, () => {
             console.log(`The server is listening on port ${serverPort}`);
