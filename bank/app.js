@@ -11,8 +11,17 @@ const initAuthorizationSchema = require('./create-schema');
 const addAdmin = require('./add-admin');
 
 const app = express();
-const serverPort = process.env.SERVER_PORT || 3000;
+const serverPort = process.env.SERVER_PORT || 3001;
 const mongoURI = process.env.MONGO_URI;
+
+const cors = require('cors');
+const corsOptions = {
+    origin: "http://localhost:3000",
+    optionsSuccessStatus: 200,
+    methods: 'POST',
+  };
+ 
+app.use(cors(corsOptions));
 
 const baseURL = "/api/v1";
 

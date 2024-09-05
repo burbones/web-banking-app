@@ -5,12 +5,16 @@ import reportWebVitals from './reportWebVitals';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './utils/router';
 import { ChakraProvider } from '@chakra-ui/react';
+import { Provider as ReduxProvider } from 'react-redux';
+import store from './store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ChakraProvider>
-      <RouterProvider router={router} />
+      <ReduxProvider>
+        <RouterProvider router={router} />
+      </ReduxProvider>
     </ChakraProvider>
   </React.StrictMode>
 );
