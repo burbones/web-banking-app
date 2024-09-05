@@ -36,7 +36,7 @@ export default function LoginForm() {
               console.log(error.response.status);
             })
           setSubmitting(false);
-          //navigate(DASHBOARD_URL);
+          navigate(DASHBOARD_URL);
 
       }}
     >
@@ -46,7 +46,10 @@ export default function LoginForm() {
               <Flex direction='column' justify='space-between' boxShadow="xl" borderRadius="md" h="80vh" w="30vw">
                   <Stack p="4" spacing="5">
                       <Heading as='h1' pt={10}>Log in</Heading>
-                      <Image src={loginPic} alt='Logic pic' boxSize="50%" />
+                      <Center h="100%">
+                        <Image src={loginPic} alt='Logic pic' w="50%" />
+                      </Center>
+                      
                       <InputControl type="email" name="email" inputProps={{type: "email", placeholder: "Enter Email..."}}/>
                       <InputControl type="password" name="password" inputProps={{type: "password", placeholder: "Enter Password..."}}/>
                   </Stack>
