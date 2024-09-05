@@ -11,5 +11,6 @@ export const TRANSACTION = "transaction";
 
 export const SIGNUP_URL = "/signup";
 export const LOGIN_URL = "/login";
+export const DASHBOARD_URL = "/dashboard";
 
 export const SERVER_LOGIN_URL = getBaseServerURL() + "api/v1" + LOGIN_URL;

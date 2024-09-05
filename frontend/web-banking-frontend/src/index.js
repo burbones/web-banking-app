@@ -8,11 +8,15 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { Provider as ReduxProvider } from 'react-redux';
 import store from './store';
 
+store.subscribe(() => {
+  localStorage.setItem("token", store.getState().auth.token);
+});
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ChakraProvider>
-      <ReduxProvider>
+      <ReduxProvider store={store}>
         <RouterProvider router={router} />
       </ReduxProvider>
     </ChakraProvider>
