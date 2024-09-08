@@ -1,6 +1,8 @@
 import { Button, Center, Flex, Grid, Heading, Stack, Text } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { InputControl } from "formik-chakra-ui";
+import { SERVER_CODE_CHECK_URL } from "../../utils/constants";
+import axios from "axios";
 
 export default function CodeCheck(props) {
     return (
@@ -18,15 +20,19 @@ export default function CodeCheck(props) {
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
-            props.next();
-            /*axios.post(SERVER_LOGIN_URL,values)
+            const payload = {
+              email: props.email,
+              code: values.code,
+            }
+            axios.post(SERVER_CODE_CHECK_URL, payload)
               .then((res) => {
-                props.next();
+                props.setStatus(true);
               })
               .catch((error) => {
-                console.log(error.response.status);
+                props.setStatus(false);
               })
-            setSubmitting(false);*/
+            setSubmitting(false);
+            props.next();
         }}
       >
         {({ isSubmitting }) => (

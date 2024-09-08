@@ -14,3 +14,5 @@ export const LOGIN_URL = "/login";
 export const DASHBOARD_URL = "/dashboard";
 
 export const SERVER_LOGIN_URL = getBaseServerURL() + "api/v1" + LOGIN_URL;
+export const SERVER_SIGN_UP_URL = getBaseServerURL() + "api/v1" + SIGNUP_URL;
+export const SERVER_CODE_CHECK_URL = SERVER_SIGN_UP_URL + "/verifyCode";
