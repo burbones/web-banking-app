@@ -22,11 +22,11 @@ const userSchema = new mongoose.Schema({
     },
     balance: {
         type: Number,
-        default: getRandomStartBalance(),
+        default: getRandomStartBalance,
     },
     code: {
         type: Number,
-        default: generateCode(),
+        default: generateCode,
     },
     isActive: {
         type: Boolean,
