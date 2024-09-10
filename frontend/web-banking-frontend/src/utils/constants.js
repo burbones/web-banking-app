@@ -17,3 +17,4 @@ export const TRANSFERS_URL = "/transaction";
 export const SERVER_LOGIN_URL = getBaseServerURL() + "api/v1" + LOGIN_URL;
 export const SERVER_SIGN_UP_URL = getBaseServerURL() + "api/v1" + SIGNUP_URL;
 export const SERVER_CODE_CHECK_URL = SERVER_SIGN_UP_URL + "/verifyCode";
+export const SERVER_DASHBOARD_URL = getBaseServerURL() + "api/v1" + DASHBOARD_URL;
