@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  IconButton,
   Box,
   CloseButton,
   Flex,
@@ -12,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import {
   FiHome,
-  FiMenu,
   FiLogOut,
 } from 'react-icons/fi';
 import { FaMoneyBillTransfer } from 'react-icons/fa6';
@@ -28,22 +26,16 @@ const LinkItems = [
 export default function Sidebar() {
   
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-      <SidebarContent display={{ base: 'none', md: 'block' }} />
+    <>
       <Drawer
         isOpen="true"
-        placement="left"
-        size="full">
+        placement="right"
+      >
         <DrawerContent>
           <SidebarContent />
         </DrawerContent>
       </Drawer>
-      {/* mobilenav */}
-      <MobileNav display={{ base: 'flex', md: 'none' }} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {/* Content */}
-      </Box>
-    </Box>
+    </>
   )
 }
 
@@ -51,8 +43,6 @@ const SidebarContent = ({onClose, ...rest} ) => {
   return (
     <Box
       bg={useColorModeValue('white', 'gray.900')}
-      borderRight="1px"
-      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
@@ -64,21 +54,19 @@ const SidebarContent = ({onClose, ...rest} ) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
-            <ReactRouterLink to={link.to}>
-                {link.name}
-            </ReactRouterLink>
+        <NavItem key={link.name} icon={link.icon} to={link.to}>
+            {link.name}
         </NavItem>
       ))}
     </Box>
   )
 }
 
-const NavItem = ({ icon, children, ...rest }) => {
+const NavItem = ({ icon, to, children, ...rest }) => {
   return (
     <Box
-      as="a"
-      href="#"
+      as={ReactRouterLink}
+      to={to} 
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}>
       <Flex
@@ -106,32 +94,5 @@ const NavItem = ({ icon, children, ...rest }) => {
         {children}
       </Flex>
     </Box>
-  )
-}
-
-
-const MobileNav = ({ onOpen, ...rest }) => {
-  return (
-    <Flex
-      ml={{ base: 0, md: 60 }}
-      px={{ base: 4, md: 24 }}
-      height="20"
-      alignItems="center"
-      bg={useColorModeValue('white', 'gray.900')}
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
-      justifyContent="flex-start"
-      {...rest}>
-      <IconButton
-        variant="outline"
-        onClick={onOpen}
-        aria-label="open menu"
-        icon={<FiMenu />}
-      />
-
-      <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Logo
-      </Text>
-    </Flex>
   )
 }
