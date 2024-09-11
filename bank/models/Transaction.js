@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const transactionSchema = new mongoose.Schema({
     type: {
@@ -23,6 +24,8 @@ const transactionSchema = new mongoose.Schema({
         index: true,
     }
 });
+
+transactionSchema.plugin(mongoosePaginate);
 
 const Transaction = mongoose.model('Transaction', transactionSchema);
 module.exports = Transaction;
