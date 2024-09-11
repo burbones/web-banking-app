@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "./low_level/Sidebar";
-import { Box, Card, CardBody, CardHeader, CircularProgress, Heading, Image, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
+import { Box, Card, CardBody, CircularProgress, Heading, Image, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios, { HttpStatusCode } from "axios";
 import { LOGIN_URL, SERVER_DASHBOARD_URL } from "../utils/constants";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { setUser } from "../authSlice";
 
 import gotMoney from "../img/got_money.png";
+import sentMoney from "../img/sent_money2.png";
 import savings from "../img/savings.jpg";
 
 export default function Dashboard() {
@@ -98,12 +99,15 @@ function TransactionList(props) {
 }
 
 function TransactionRow({transaction}) {
+    const email = useSelector((state) => state.auth.user);
+    const isIssuer = transaction.issuer === email;
+
     return (
         <Tr>
-            <Td borderColor='gray.300'><Image src={gotMoney} alt="money pic"></Image></Td>
-            <Td borderColor='gray.300'><b>{transaction.type}</b></Td>
+            <Td borderColor='gray.300'>{getPic(transaction.type, isIssuer)}</Td>
+            <Td borderColor='gray.300'><b>{getOperationType(transaction.type)}</b></Td>
             <Td borderColor='gray.300'>{stringToDateString(transaction.timestamp)}</Td>
-            {getAmountFormatted(transaction)}
+            {getAmountFormatted(transaction, email)}
         </Tr>
     );
 }
@@ -112,11 +116,11 @@ function stringToDateString(str) {
     return new Date(Date.parse(str)).toDateString();
 }
 
-function getAmountFormatted(transaction) {
+function getAmountFormatted(transaction, email) {
     let color, str;
     const amount = (+transaction.amount / 100).toFixed(2);
 
-    if (transaction.type === "send") {
+    if (transaction.type === "send" && transaction.issuer === email) {
         color = 'red';
         str = `-$${amount}`;
     } else {
@@ -124,4 +128,18 @@ function getAmountFormatted(transaction) {
         str = `+$${amount}`;
     }
     return <Td borderColor='gray.300' color={color} isNumeric>{str}</Td>;
+}
+
+function getOperationType(type) {
+    if (type === "send") {
+        return "Transfer";
+    }
+}
+
+function getPic(type, isIssuer) {
+    if (type === "send" && isIssuer) {
+        return <Image src={sentMoney} alt="money pic"></Image>;
+    } else {
+        return <Image src={gotMoney} alt="money pic"></Image>;
+    }
 }

@@ -10,6 +10,7 @@ import store from './store';
 
 store.subscribe(() => {
   localStorage.setItem("token", store.getState().auth.token);
+  localStorage.setItem("user", store.getState().auth.user);
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

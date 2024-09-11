@@ -32,9 +32,10 @@ export default function LoginForm() {
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
+          const user = values.email;
           axios.post(SERVER_LOGIN_URL,values)
             .then((res) => {
-              dispatch(setUser({token: res.data}));
+              dispatch(setUser({user: user, token: res.data}));
               navigate(DASHBOARD_URL);
             })
             .catch((error) => {
