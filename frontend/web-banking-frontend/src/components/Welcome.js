@@ -12,7 +12,7 @@ export default function Welcome() {
                     <Flex>
                         <Box p="10" bg="white" borderWidth='1px' borderRadius='lg'>
                             <Heading as='h1' size='4xl' mb='10'>
-                                Welcome to the <br /> <em>Web Banking App!</em>
+                                Welcome to <br /> <em>Fresh Start Banking App!</em>
                             </Heading>
                             <Button 
                                 colorScheme='purple'
