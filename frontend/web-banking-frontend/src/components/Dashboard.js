@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "./low_level/Sidebar";
-import { Box, CircularProgress, Heading, Image, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
+import { Box, Card, CardBody, CardHeader, CircularProgress, Heading, Image, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios, { HttpStatusCode } from "axios";
 import { LOGIN_URL, SERVER_DASHBOARD_URL } from "../utils/constants";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { setUser } from "../authSlice";
 
 import gotMoney from "../img/got_money.png";
+import savings from "../img/savings.jpg";
 
 export default function Dashboard() {
     const [data, setData] = useState(null);
@@ -34,16 +35,32 @@ export default function Dashboard() {
     }, [token, navigate, dispatch]);
 
     return (
-        <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+        <Box minH="100vh" bg={useColorModeValue('gray.50')}>
             <Sidebar />
-            <Box p="4"> {!data ? <CircularProgress isIndeterminate color='green.300' size='20' /> :
+            <Box p="4"> {!data ? <CircularProgress isIndeterminate color='blue.300' size='20' /> :
                     <>
                         <Heading mb={5}>
                             Dashboard
                         </Heading>
-                        <Text fontSize='xl' mb={5}>
-                            <b>Current balance:</b> {"$" + data.balance}
-                        </Text>
+                        <Card 
+                            fontSize='xl'
+                            mb={5} w="50%"
+                            overflow='hidden'
+                            variant='outline'
+                            direction={{ base: 'column', sm: 'row' }}
+                            justify="space-between">
+                            <Stack>
+                                <CardBody>
+                                    <Heading size="md">
+                                        Current balance:
+                                    </Heading>
+                                    <Text mt="5">
+                                        {"$" + data.balance}
+                                    </Text>
+                                </CardBody>
+                            </Stack>
+                            <Image objectFit="cover" src={savings} alt="savings" boxSize="20%" />
+                        </Card>
                         <TransactionList transactions={data.transactions} />
                     </>
                 }
@@ -62,10 +79,10 @@ function TransactionList(props) {
                 <Table>
                     <Thead>
                         <Tr>
-                            <Th></Th>
-                            <Th>Operation type</Th>
-                            <Th>Timestamp</Th>
-                            <Th isNumeric>Amount</Th>
+                            <Th borderColor='gray.500'></Th>
+                            <Th borderColor='gray.500' fontSize="l">Operation type</Th>
+                            <Th borderColor='gray.500' fontSize="l">Timestamp</Th>
+                            <Th borderColor='gray.500' fontSize="l" isNumeric>Amount</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -75,6 +92,7 @@ function TransactionList(props) {
                     </Tbody>
                 </Table>
             </TableContainer>
+            
         </Box>
     );
 }
@@ -82,9 +100,9 @@ function TransactionList(props) {
 function TransactionRow({transaction}) {
     return (
         <Tr>
-            <Td><Image src={gotMoney} alt="money pic"></Image></Td>
-            <Td><b>{transaction.type}</b></Td>
-            <Td>{stringToDateString(transaction.timestamp)}</Td>
+            <Td borderColor='gray.300'><Image src={gotMoney} alt="money pic"></Image></Td>
+            <Td borderColor='gray.300'><b>{transaction.type}</b></Td>
+            <Td borderColor='gray.300'>{stringToDateString(transaction.timestamp)}</Td>
             {getAmountFormatted(transaction)}
         </Tr>
     );
@@ -105,5 +123,5 @@ function getAmountFormatted(transaction) {
         color = 'green';
         str = `+$${amount}`;
     }
-    return <Td color={color} isNumeric>{str}</Td>;
+    return <Td borderColor='gray.300' color={color} isNumeric>{str}</Td>;
 }
