@@ -51,8 +51,8 @@ export default function LoginForm() {
       {({ isSubmitting }) => (
         <Form h="100%">
           <Grid h="100%" w="100%" placeItems="center">
-              <Flex direction='column' justify='space-around' boxShadow="xl" borderRadius="md" h="80vh" w="30vw" bgColor='white'>
-                  <Stack p="4" spacing="5">
+              <Flex direction='column' justify='space-around' boxShadow="xl" borderRadius="md" minH="80vh" w="30vw" bgColor='white'>
+                  <Stack p="4" pl="10" pr="10" spacing="5">
                       <Heading as='h1' pt={10}>Log in</Heading>
                       <Center h="100%">
                         <Image src={loginPic} alt='Logic pic' w="50%" />

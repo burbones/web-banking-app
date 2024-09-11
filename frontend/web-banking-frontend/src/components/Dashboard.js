@@ -1,11 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "./low_level/Sidebar";
-import { Box, CircularProgress, Heading, Text, useColorModeValue } from "@chakra-ui/react";
+import { Box, CircularProgress, Heading, Image, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios, { HttpStatusCode } from "axios";
 import { LOGIN_URL, SERVER_DASHBOARD_URL } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../authSlice";
+
+import gotMoney from "../img/got_money.png";
 
 export default function Dashboard() {
     const [data, setData] = useState(null);
@@ -52,12 +54,56 @@ export default function Dashboard() {
 
 function TransactionList(props) {
     return (
-        <>
+        <Box w="50%">
             <Text fontSize='xl'>
                 <b>Transactions:</b>
-                {props.transactions.map((transaction) => <p>{transaction.type}</p>)}
             </Text>
-        </>
+            <TableContainer mt={5} ml={10}>
+                <Table>
+                    <Thead>
+                        <Tr>
+                            <Th></Th>
+                            <Th>Operation type</Th>
+                            <Th>Timestamp</Th>
+                            <Th isNumeric>Amount</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {props.transactions.map((transaction) => 
+                            <TransactionRow transaction={transaction}/>
+                        )}
+                    </Tbody>
+                </Table>
+            </TableContainer>
+        </Box>
     );
+}
 
+function TransactionRow({transaction}) {
+    return (
+        <Tr>
+            <Td><Image src={gotMoney} alt="money pic"></Image></Td>
+            <Td><b>{transaction.type}</b></Td>
+            <Td>{stringToDateString(transaction.timestamp)}</Td>
+            {getAmountFormatted(transaction)}
+        </Tr>
+    );
+}
+
+function stringToDateString(str) {
+    return new Date(Date.parse(str)).toDateString();
+}
+
+function getAmountFormatted(transaction) {
+    let color, str;
+    const amount = (+transaction.amount / 100).toFixed(2);
+
+    if (transaction.type === "send") {
+        color = 'red';
+        str = `-$${amount}`;
+    } else {
+        color = 'green';
+        str = `+$${amount}`;
+    }
+    return <Td color={color} isNumeric>{str}</Td>;
 }

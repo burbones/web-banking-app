@@ -2,13 +2,12 @@ import { Box, Button, Center, Flex, Heading, Text } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { LOGIN_URL, SIGNUP_URL } from "../utils/constants";
-import back from "../img/background.jpg";
+import back from "../img/background_new.jpg";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 
 export default function Welcome() {
     return (
-        <main>
-            <Box w="100%" h="100%" bgImage={back}>
+            <Box as="main" w="100%" h="90vh" bgImage={back} bgPosition="center">
                 <Center w="50vw" h="80%">
                     <Flex>
                         <Box p="10" bg="white" borderWidth='1px' borderRadius='lg'>
@@ -35,7 +34,5 @@ export default function Welcome() {
                     </Flex>
                 </Center>
             </Box>
-
-        </main>
     );
 }
