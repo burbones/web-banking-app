@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "./low_level/Sidebar";
-import { Box, Card, CardBody, CircularProgress, Heading, Image, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
+import { Box, Card, CardBody, CircularProgress, Flex, Grid, GridItem, Heading, Image, Select, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios, { HttpStatusCode } from "axios";
 import { LOGIN_URL, SERVER_DASHBOARD_URL } from "../utils/constants";
@@ -37,45 +37,62 @@ export default function Dashboard() {
 
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.50')}>
-            <Sidebar />
-            <Box p="4"> {!data ? <CircularProgress isIndeterminate color='blue.300' size='20' /> :
-                    <>
-                        <Heading mb={5}>
-                            Dashboard
-                        </Heading>
-                        <Card 
-                            fontSize='xl'
-                            mb={5} w="50%"
-                            overflow='hidden'
-                            variant='outline'
-                            direction={{ base: 'column', sm: 'row' }}
-                            justify="space-between">
-                            <Stack>
-                                <CardBody>
-                                    <Heading size="md">
-                                        Current balance:
-                                    </Heading>
-                                    <Text mt="5">
-                                        {"$" + data.balance}
-                                    </Text>
-                                </CardBody>
-                            </Stack>
-                            <Image objectFit="cover" src={savings} alt="savings" boxSize="20%" />
-                        </Card>
-                        <TransactionList transactions={data.transactions} />
-                    </>
-                }
-            </Box>
+            <Grid gridTemplateColumns={'20% 80%'}>
+                <GridItem>
+                    <Sidebar />
+                </GridItem>
+                <GridItem>
+                    <Box p="4"> {!data ? <CircularProgress isIndeterminate color='blue.300' size='20' /> :
+                        <>
+                            <Heading mb={5}>
+                                Dashboard
+                            </Heading>
+                            <Card 
+                                fontSize='xl'
+                                mb={5} w="70%"
+                                overflow='hidden'
+                                variant='outline'
+                                direction={{ base: 'column', sm: 'row' }}
+                                justify="space-between">
+                                <Stack>
+                                    <CardBody>
+                                        <Heading size="md">
+                                            Current balance:
+                                        </Heading>
+                                        <Text mt="5">
+                                            {"$" + data.balance}
+                                        </Text>
+                                    </CardBody>
+                                </Stack>
+                                <Image objectFit="cover" src={savings} alt="savings" boxSize="20%" />
+                            </Card>
+                            <TransactionList transactions={data.transactions} />
+                        </>
+                    }
+                </Box>
+                </GridItem>
+            </Grid>
+            
+
         </Box>
     );
 }
 
 function TransactionList(props) {
     return (
-        <Box w="50%">
-            <Text fontSize='xl'>
-                <b>Transactions:</b>
-            </Text>
+        <Box w="70%">
+            <Flex justify="space-between">
+                <Text fontSize='xl'>
+                    <b>Transactions:</b>
+                </Text>
+
+                <Select placeholder='Period' maxWidth="20%">
+                    <option value='day'>Day</option>
+                    <option value='week'>Week</option>
+                    <option value='month'>Month</option>
+                </Select>
+            </Flex>
+
             <TableContainer mt={5} ml={10}>
                 <Table>
                     <Thead>
@@ -93,7 +110,6 @@ function TransactionList(props) {
                     </Tbody>
                 </Table>
             </TableContainer>
-            
         </Box>
     );
 }

@@ -8,10 +8,15 @@ import {
   Text,
   Drawer,
   DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+  Button,
+  IconButton,
 } from '@chakra-ui/react';
 import {
   FiHome,
   FiLogOut,
+  FiMenu,
 } from 'react-icons/fi';
 import { FaMoneyBillTransfer } from 'react-icons/fa6';
 import { Link as ReactRouterLink } from 'react-router-dom';
@@ -24,17 +29,24 @@ const LinkItems = [
 ];
 
 export default function Sidebar() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   
   return (
     <>
+      <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
-        isOpen="true"
-        placement="right"
-      >
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        returnFocusOnClose={false}
+        onOverlayClick={onClose}
+        size="full">
         <DrawerContent>
-          <SidebarContent />
+          <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
+      {/* mobilenav */}
+      <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
     </>
   )
 }
@@ -94,5 +106,25 @@ const NavItem = ({ icon, to, children, ...rest }) => {
         {children}
       </Flex>
     </Box>
+  )
+}
+
+const MobileNav = ({ onOpen, ...rest }) => {
+  return (
+    <Flex
+      ml={{ base: 0, md: 60 }}
+      px={{ base: 4, md: 24 }}
+      height="20"
+      alignItems="center"
+      bg={useColorModeValue('gray.50', 'gray.900')}
+      justifyContent="flex-start"
+      {...rest}>
+      <IconButton
+        variant="outline"
+        onClick={onOpen}
+        aria-label="open menu"
+        icon={<FiMenu />}
+      />
+    </Flex>
   )
 }
