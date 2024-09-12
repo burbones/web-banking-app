@@ -2,9 +2,10 @@ const Transaction = require('../models/Transaction.js');
 const User = require('../models/User.js');
 
 const getDashboard = async (req, res) => {
-    /*const { page, limit } = req.query;*/
-    const page = 1;
-    const limit = 2;
+    let { page, limit, periodStart } = req.query;
+    
+    page = 1;
+    limit = 10;
 
     const curUser = await User.findOne({ email: req.email });
     
@@ -15,9 +16,7 @@ const getDashboard = async (req, res) => {
         sort: { timestamp: -1 },
     };
     
-    const transactions = await Transaction.paginate( {$or: [{ issuer: req.email},{acquirer: req.email}]}, options );
-
-    console.log(transactions.docs);
+    const transactions = await Transaction.paginate( {$or: [{ issuer: req.email},{acquirer: req.email}], timestamp: {$gte: Date.parse(periodStart)}}, options );
 
     res.status(200).json({
         balance: parseFloat(curUser.balance) / 100,

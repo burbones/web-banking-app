@@ -13,27 +13,33 @@ import savings from "../img/savings.jpg";
 
 export default function Dashboard() {
     const [data, setData] = useState(null);
+    const [selection, setSelection] = useState(null);
     const token = useSelector((state) => state.auth.token);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        axios.get(SERVER_DASHBOARD_URL, {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        })
-        .then((res) => {
-            setData(res.data);
-        })
-        .catch((err) => {
-            if (err.status === HttpStatusCode.Unauthorized) {
-                dispatch(setUser({token: ""}));
-                navigate(LOGIN_URL);
-            }
-        })
-
-    }, [token, navigate, dispatch]);
+        if (selection !== -1) {
+            const params = {
+                periodStart: getStart(selection),
+            };
+            axios.get(SERVER_DASHBOARD_URL, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                params,
+            })
+            .then((res) => {
+                setData(res.data);
+            })
+            .catch((err) => {
+                if (err.status === HttpStatusCode.Unauthorized) {
+                    dispatch(setUser({token: ""}));
+                    navigate(LOGIN_URL);
+                }
+            })
+        }
+    }, [token, navigate, dispatch, selection]);
 
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.50')}>
@@ -66,7 +72,7 @@ export default function Dashboard() {
                                 </Stack>
                                 <Image objectFit="cover" src={savings} alt="savings" boxSize="20%" />
                             </Card>
-                            <TransactionList transactions={data.transactions} />
+                            <TransactionList transactions={data.transactions} changeSelection={setSelection} />
                         </>
                     }
                 </Box>
@@ -86,7 +92,12 @@ function TransactionList(props) {
                     <b>Transactions:</b>
                 </Text>
 
-                <Select placeholder='Period' maxWidth="20%">
+                <Select
+                    placeholder='Period'
+                    maxWidth="20%"
+                    bg={useColorModeValue('purple.100')}
+                    onChange={(e) => props.changeSelection(e.target.value)}
+                >
                     <option value='day'>Day</option>
                     <option value='week'>Week</option>
                     <option value='month'>Month</option>
@@ -157,5 +168,27 @@ function getPic(type, isIssuer) {
         return <Image src={sentMoney} alt="money pic"></Image>;
     } else {
         return <Image src={gotMoney} alt="money pic"></Image>;
+    }
+}
+
+function getStart(selection) {
+    let d = new Date();
+    d.setUTCHours(0,0,0,0);
+    switch (selection) {
+        case "day": {
+            return d;
+        }
+        case "week": {
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            d.setDate(diff);
+            return d;
+        }
+        case "month": {
+            return new Date(d.getFullYear(), d.getMonth(), 1);
+        }
+        default: {
+            return -1;
+        }
     }
 }

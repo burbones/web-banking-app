@@ -8,9 +8,7 @@ import {
   Text,
   Drawer,
   DrawerContent,
-  DrawerCloseButton,
   useDisclosure,
-  Button,
   IconButton,
 } from '@chakra-ui/react';
 import {
