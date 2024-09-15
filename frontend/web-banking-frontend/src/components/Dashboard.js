@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "./low_level/Sidebar";
-import { Box, Card, CardBody, CircularProgress, Flex, Grid, GridItem, Heading, Image, Select, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
+import { Box, CircularProgress, Flex, Grid, GridItem, Heading, Image, Select, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios, { HttpStatusCode } from "axios";
 import { LOGIN_URL, SERVER_DASHBOARD_URL } from "../utils/constants";
@@ -9,7 +9,7 @@ import { setUser } from "../authSlice";
 
 import gotMoney from "../img/got_money.png";
 import sentMoney from "../img/sent_money2.png";
-import savings from "../img/savings.jpg";
+import BalanceCard from "./low_level/BalanceCard";
 
 export default function Dashboard() {
     const [data, setData] = useState(null);
@@ -53,25 +53,7 @@ export default function Dashboard() {
                             <Heading mb={5}>
                                 Dashboard
                             </Heading>
-                            <Card 
-                                fontSize='xl'
-                                mb={5} w="70%"
-                                overflow='hidden'
-                                variant='outline'
-                                direction={{ base: 'column', sm: 'row' }}
-                                justify="space-between">
-                                <Stack>
-                                    <CardBody>
-                                        <Heading size="md">
-                                            Current balance:
-                                        </Heading>
-                                        <Text mt="5">
-                                            {"$" + data.balance}
-                                        </Text>
-                                    </CardBody>
-                                </Stack>
-                                <Image objectFit="cover" src={savings} alt="savings" boxSize="20%" />
-                            </Card>
+                            <BalanceCard balance={data.balance} />
                             <TransactionList transactions={data.transactions} changeSelection={setSelection} />
                         </>
                     }
@@ -116,7 +98,7 @@ function TransactionList(props) {
                     </Thead>
                     <Tbody>
                         {props.transactions.map((transaction) => 
-                            <TransactionRow transaction={transaction}/>
+                            <TransactionRow key={transaction.timestamp} transaction={transaction}/>
                         )}
                     </Tbody>
                 </Table>
