@@ -50,18 +50,16 @@ export default function Dashboard() {
                 <GridItem>
                     <Box p="4"> {!data ? <CircularProgress isIndeterminate color='blue.300' size='20' /> :
                         <>
-                            <Heading mb={5}>
+                            <Heading>
                                 Dashboard
                             </Heading>
                             <BalanceCard balance={data.balance} />
                             <TransactionList transactions={data.transactions} changeSelection={setSelection} />
                         </>
                     }
-                </Box>
+                    </Box>
                 </GridItem>
             </Grid>
-            
-
         </Box>
     );
 }
@@ -75,10 +73,11 @@ function TransactionList(props) {
                 </Text>
 
                 <Select
-                    placeholder='Period'
+                    placeholder="Choose period"
                     maxWidth="20%"
                     bg={useColorModeValue('purple.100')}
                     onChange={(e) => props.changeSelection(e.target.value)}
+                    defaultValue={-1}
                 >
                     <option value='day'>Day</option>
                     <option value='week'>Week</option>
@@ -170,7 +169,7 @@ function getStart(selection) {
             return new Date(d.getFullYear(), d.getMonth(), 1);
         }
         default: {
-            return -1;
+            return d;
         }
     }
 }

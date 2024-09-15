@@ -4,7 +4,7 @@ import savings from "../../img/savings.jpg";
 export default function BalanceCard( {balance} ) {
     return <Card 
     fontSize='xl'
-    mb={5} w="70%"
+    mt={5} mb={5} w="70%"
     overflow='hidden'
     variant='outline'
     direction={{ base: 'column', sm: 'row' }}
