@@ -1,31 +1,32 @@
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 
-import { useDispatch } from "react-redux";
-import { Form, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Link as ReactRouterLink } from 'react-router-dom';
-import { Button, Center, Link as ChakraLink, Flex, Grid, Heading, Image, Stack, useToast } from '@chakra-ui/react';
-import { Formik } from "formik";
+import { Button, Center, Flex, Grid, Heading, Stack, useToast } from '@chakra-ui/react';
+import { Form, Formik } from "formik";
 import { InputControl } from "formik-chakra-ui";
-import transferPic from "../../img/transferPic.png";
+import { LOGIN_URL, SERVER_TRANSACTION_URL } from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
+import { setUser } from "../../authSlice";
 
-export default function TransactionForm() {
-    const dispatch = useDispatch();
+export default function TransactionForm(props) {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const toast = useToast();
+    const token = useSelector((state) => state.auth.token);
   
     return (
         <Formik
-        initialValues={{ receiver: '', actionType: '', amount: '', description: '' }}
+        initialValues={{ user: '', amount: '', description: '' }}
         validate={values => {
           const errors = {};
-          if (!values.receiver) {
-            errors.receiver = '*Required';
-          } else if (
-            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.receiver)
+          if (!values.user) {
+            errors.user = '*Required';
+          } /*else if (
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.user)
           ) {
-            errors.receiver = 'Invalid email address';
-          }
+            errors.user = 'Invalid email address';
+          }*/
 
           if (values.amount <= 0) {
             errors.amount = 'The amount should be greater than zero';
@@ -33,22 +34,39 @@ export default function TransactionForm() {
 
           return errors;
         }}
-        onSubmit={(values, { setSubmitting }) => {
-            /*const user = values.email;
-            axios.post(SERVER_LOGIN_URL,values)
+        onSubmit={(values, { setSubmitting, resetForm }) => {
+            const data = {...values};
+            data.type = "send";
+            data.amount = data.amount * 100;
+            axios.post(SERVER_TRANSACTION_URL, data, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+            })
               .then((res) => {
-                dispatch(setUser({user: user, token: res.data}));
-                navigate(DASHBOARD_URL);
+                toast({
+                    position: 'bottom-center',
+                    title: "Successful transaction",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                  });
+                props.setIsRefreshNeeded(true);
+                resetForm();
               })
               .catch((error) => {
+                if (error.status === HttpStatusCode.Unauthorized) {
+                    dispatch(setUser({token: ""}));
+                    navigate(LOGIN_URL);
+                }
                 toast({
-                  position: 'top-center',
+                  position: 'bottom-center',
                   title: error.response.data.error,
                   status: "error",
                   duration: 5000,
                 });
               })
-            */
+            
             setSubmitting(false);
         }}
       >
@@ -59,14 +77,15 @@ export default function TransactionForm() {
                     <Stack p="4" pl="10" pr="10" spacing="5">
                         <Heading as='h1' pt={10} mb={10}>Transfer details</Heading>
                         
-                        <InputControl type="email" name="receiver" inputProps={{type: "email", placeholder: "To whom (email)"}}/>
+                        <InputControl type="email" name="user" inputProps={{type: "email", placeholder: "To whom (email)"}}/>
                         <InputControl type="number" name="amount" inputProps={{type: "number", placeholder: "Enter amount (in dollars)"}}/>
                         <InputControl type="text" name="description" inputProps={{type: "text", placeholder: "Enter transfer description"}}/>
                     </Stack>
                     <Center>
                         <Button
                             minW="20%"
-                            mb="10" mt="10"
+                            mb="10"
+                            mt="10"
                             type="submit"
                             disabled={isSubmitting}
                             colorScheme='purple'

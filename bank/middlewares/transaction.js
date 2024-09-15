@@ -7,7 +7,8 @@ const transactionRequestSchema = {
     properties: {
         user: {type: "string"},
         type: {type: "string"},
-        amount: {type: "number"}
+        amount: {type: "number"},
+        description: {type: "string"},
     },
     required: ["user", "type", "amount"]
 };

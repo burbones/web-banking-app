@@ -13,30 +13,36 @@ import freshPic from "../img/fresh_start.png";
 
 export default function Transaction() {
     const [balance, setBalance] = useState(null);
+    const [isRefreshNeeded, setIsRefreshNeeded] = useState(true);
     const token = useSelector((state) => state.auth.token);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const params = {
-            periodStart: new Date(),
-        };
-        axios.get(SERVER_DASHBOARD_URL, {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            },
-            params,
-        })
-        .then((res) => {
-            setBalance(res.data.balance);
-        })
-        .catch((err) => {
-            if (err.status === HttpStatusCode.Unauthorized) {
-                dispatch(setUser({token: ""}));
-                navigate(LOGIN_URL);
-            }
-        })
-    }, [token, navigate, dispatch]);
+        if (isRefreshNeeded) {
+            const params = {
+                periodStart: new Date(),
+            };
+            axios.get(SERVER_DASHBOARD_URL, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                params,
+            })
+            .then((res) => {
+                setBalance(res.data.balance);
+            })
+            .catch((err) => {
+                if (err.status === HttpStatusCode.Unauthorized) {
+                    dispatch(setUser({token: ""}));
+                    navigate(LOGIN_URL);
+                }
+            })
+
+            setIsRefreshNeeded(false);
+        }
+
+    }, [token, navigate, dispatch, isRefreshNeeded]);
 
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.50')}>
@@ -53,7 +59,7 @@ export default function Transaction() {
                             <BalanceCard balance={balance}/>
                             <Grid gridTemplateColumns={'50% 50%'}>
                                 <GridItem>
-                                    <TransactionForm />
+                                    <TransactionForm setIsRefreshNeeded={setIsRefreshNeeded} />
                                 </GridItem>
                                 <GridItem>
                                     <Flex h="100%" direction="column" justify="end">
