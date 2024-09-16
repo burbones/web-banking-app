@@ -6,6 +6,7 @@ const getDashboard = async (req, res) => {
     
     page = 1;
     limit = 10;
+    periodStart = periodStart ? periodStart : 0;
 
     const curUser = await User.findOne({ email: req.email });
     
@@ -16,7 +17,7 @@ const getDashboard = async (req, res) => {
         sort: { timestamp: -1 },
     };
     
-    const transactions = await Transaction.paginate( {$or: [{ issuer: req.email},{acquirer: req.email}], timestamp: {$gte: Date.parse(periodStart)}}, options );
+    const transactions = await Transaction.paginate( {$or: [{issuer: req.email},{acquirer: req.email}], timestamp: {$gte: Date.parse(periodStart)}}, options );
 
     res.status(200).json({
         balance: parseFloat(curUser.balance) / 100,

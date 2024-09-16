@@ -18,12 +18,15 @@ import {
 } from 'react-icons/fi';
 import { FaMoneyBillTransfer } from 'react-icons/fa6';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { DASHBOARD_URL, LOGIN_URL, TRANSFERS_URL } from '../../utils/constants';
+import { DASHBOARD_URL, LOGIN_URL, SERVER_LOGOUT_URL, TRANSFERS_URL } from '../../utils/constants';
+import { setUser } from '../../authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 const LinkItems = [
   { name: 'Dashboard', icon: FiHome, to: DASHBOARD_URL },
   { name: 'Transfer money', icon: FaMoneyBillTransfer, to: TRANSFERS_URL },
-  { name: 'Log out', icon: FiLogOut, to: LOGIN_URL },
+  { name: 'Log out', icon: FiLogOut, to: LOGIN_URL, handleClick: logout },
 ];
 
 export default function Sidebar() {
@@ -64,7 +67,7 @@ const SidebarContent = ({onClose, ...rest} ) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} to={link.to}>
+        <NavItem key={link.name} icon={link.icon} to={link.to} handleClick={link.handleClick}>
             {link.name}
         </NavItem>
       ))}
@@ -72,11 +75,19 @@ const SidebarContent = ({onClose, ...rest} ) => {
   )
 }
 
-const NavItem = ({ icon, to, children, ...rest }) => {
+const NavItem = ({ icon, to, children, handleClick, ...rest }) => {
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token); 
+
   return (
     <Box
+      onClick={() => {
+        if (handleClick) {
+          handleClick(dispatch, token);
+        }
+      }}
       as={ReactRouterLink}
-      to={to} 
+      to={to}
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}>
       <Flex
@@ -125,4 +136,14 @@ const MobileNav = ({ onOpen, ...rest }) => {
       />
     </Flex>
   )
+}
+
+function logout(dispatch, token) {
+  axios.delete(SERVER_LOGOUT_URL, {
+    headers: {
+      'Authorization': 'Bearer ' + token
+    },
+  });
+
+  /*dispatch(setUser({user: "", token: ""}));*/
 }
