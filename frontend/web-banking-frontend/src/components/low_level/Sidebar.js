@@ -145,5 +145,5 @@ function logout(dispatch, token) {
     },
   });
 
-  /*dispatch(setUser({user: "", token: ""}));*/
+  dispatch(setUser({user: "", token: ""}));
 }

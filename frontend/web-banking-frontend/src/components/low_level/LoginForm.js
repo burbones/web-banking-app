@@ -52,7 +52,7 @@ export default function LoginForm() {
       {({ isSubmitting }) => (
         <Form h="100%">
           <Grid h="100%" w="100%" placeItems="center">
-              <Flex direction='column' justify='space-around' boxShadow="xl" borderRadius="md" minH="80vh" w="30vw" bgColor='white'>
+              <Flex direction='column' justify='space-around' boxShadow="xl" borderRadius="md" minH="80vh" w={{base: "80vw", md: "30vw"}} bgColor='white'>
                   <Stack p="4" pl="10" pr="10" spacing="5">
                       <Heading as='h1' pt={10}>Log in</Heading>
                       <Center h="100%">
@@ -64,7 +64,7 @@ export default function LoginForm() {
                   </Stack>
                   <Center>
                       <Button
-                          w="20%"
+                          minW="20%"
                           mb="10"
                           type="submit"
                           disabled={isSubmitting}
@@ -74,8 +74,11 @@ export default function LoginForm() {
                       </Button>
                   </Center>
                   <Center>
-                    <Text>
-                      Don’t have an account yet? <ChakraLink as={ReactRouterLink} to={SIGNUP_URL} color='blue'>Sign up here!</ChakraLink>
+                    <Text display={{ base: "none", md: "flex" }}>
+                      Don’t have an account yet?&nbsp; <ChakraLink as={ReactRouterLink} to={SIGNUP_URL} color='blue'>Sign up here!</ChakraLink>
+                    </Text>
+                    <Text display={{ base: "block", md: "none" }} mb="5" textAlign="center">
+                      Don’t have an account yet?<br /> <ChakraLink as={ReactRouterLink} to={SIGNUP_URL} color='blue'>Sign up here!</ChakraLink>
                     </Text>
                   </Center>
               </Flex>

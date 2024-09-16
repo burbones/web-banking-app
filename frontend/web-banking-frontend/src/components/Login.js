@@ -6,7 +6,7 @@ import saveMoney from "../img/save_money.jpg";
 export default function Login() {
     return (
         <Box as='main' w="100%" h="90vh" bgImage={loginBackground}>
-            <Grid h="100%" templateColumns='repeat(2, 1fr)' gap={10} pt='10'>
+            <Grid h="100%" templateColumns={{ base: '0% 100%', md: 'repeat(2, 1fr)' }} gap={{ base: "0", md: "10" }} pt='10'>
                 <GridItem>
                     <Center h="100%">
                         <Image

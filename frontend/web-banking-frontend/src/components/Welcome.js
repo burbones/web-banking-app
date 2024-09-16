@@ -8,10 +8,10 @@ import { ArrowForwardIcon } from "@chakra-ui/icons";
 export default function Welcome() {
     return (
             <Box as="main" w="100%" h="90vh" bgImage={back} bgPosition="center">
-                <Center w="50vw" h="80%">
+                <Center w={{ base: '100vw', md: '50vw' }} h="80%">
                     <Flex>
                         <Box p="10" bg="white" borderWidth='1px' borderRadius='lg'>
-                            <Heading as='h1' size='4xl' mb='10'>
+                            <Heading as='h1' size={{ base: '2xl', md:'4xl' }} mb='10'>
                                 Welcome to <br /> <em>Fresh Start Banking App!</em>
                             </Heading>
                             <Button 
