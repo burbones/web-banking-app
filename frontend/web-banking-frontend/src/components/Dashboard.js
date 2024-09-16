@@ -15,6 +15,7 @@ export default function Dashboard() {
     const [data, setData] = useState(null);
     const [selection, setSelection] = useState(null);
     const token = useSelector((state) => state.auth.token);
+    const user = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -51,7 +52,7 @@ export default function Dashboard() {
                     <Box p="4"> {!data ? <CircularProgress isIndeterminate color='blue.300' size='20' /> :
                         <>
                             <Heading>
-                                Dashboard
+                                Hello, {getUserName(user)}!
                             </Heading>
                             <BalanceCard balance={data.balance} />
                             <TransactionList transactions={data.transactions} changeSelection={setSelection} />
@@ -172,4 +173,8 @@ function getStart(selection) {
             return d;
         }
     }
+}
+
+function getUserName(email) {
+    return email.split("@")[0];
 }

@@ -46,7 +46,7 @@ export default function SignupForm(props) {
         {({ isSubmitting }) => (
           <Form h="100%">
             <Grid h="100%" w="100%" placeItems="center">
-                <Flex direction='column' justify='space-around' boxShadow="xl" borderRadius="md" minH="80vh" w="30vw" bgColor="white">
+                <Flex direction='column' justify='space-around' boxShadow="xl" borderRadius="md" minH="80vh" w={{base: "80vw", md: "30vw"}} bgColor="white">
                     <Stack p="4" pl="10" pr="10" spacing="5">
                         <Heading as='h1' pt={10}>Sign up</Heading>
                         <Center h="100%">
@@ -59,7 +59,7 @@ export default function SignupForm(props) {
                     </Stack>
                     <Center>
                         <Button
-                            w="20%"
+                            minW="20%"
                             mb="10"
                             type="submit"
                             disabled={isSubmitting}

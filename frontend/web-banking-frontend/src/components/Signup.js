@@ -28,7 +28,7 @@ export default function Signup() {
 
     return (
         <Box as='main' w="100%" h="90vh" bgImage={backSignup} bgPosition="center">
-            <Grid h="100%" templateColumns='repeat(2, 1fr)' gap={10} pt='10'>
+            <Grid h="100%" templateColumns={{ base: '100% 0%', md: 'repeat(2, 1fr)' }} gap={{ base: "0", md: "10" }} pt='10'>
                 <GridItem h="100%"> 
                     {renderStep(curStep)}
                 </GridItem>
