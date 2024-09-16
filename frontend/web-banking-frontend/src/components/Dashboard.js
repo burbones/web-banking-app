@@ -44,14 +44,15 @@ export default function Dashboard() {
 
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.50')}>
-            <Grid gridTemplateColumns={'20% 80%'}>
+            <Sidebar />
+            <Grid gridTemplateColumns={{base: '0% 100%', md: '20% 80%'}}>
                 <GridItem>
-                    <Sidebar />
+                   
                 </GridItem>
                 <GridItem>
                     <Box p="4"> {!data ? <CircularProgress isIndeterminate color='blue.300' size='20' /> :
                         <>
-                            <Heading>
+                            <Heading mt={{ base: "0", md: "50" }}>
                                 Hello, {getUserName(user)}!
                             </Heading>
                             <BalanceCard balance={data.balance} />
@@ -67,7 +68,7 @@ export default function Dashboard() {
 
 function TransactionList(props) {
     return (
-        <Box w="70%">
+        <Box w={{base: "90vw", md: "70%"}}>
             <Flex justify="space-between">
                 <Text fontSize='xl'>
                     <b>Transactions:</b>
@@ -75,7 +76,7 @@ function TransactionList(props) {
 
                 <Select
                     placeholder="Choose period"
-                    maxWidth="20%"
+                    maxWidth={{ base: "30%", md: "20%" }}
                     bg={useColorModeValue('purple.100')}
                     onChange={(e) => props.changeSelection(e.target.value)}
                     defaultValue={-1}
@@ -85,25 +86,30 @@ function TransactionList(props) {
                     <option value='month'>Month</option>
                 </Select>
             </Flex>
-
-            <TableContainer mt={5} ml={10}>
-                <Table>
-                    <Thead>
-                        <Tr>
-                            <Th borderColor='gray.500'></Th>
-                            <Th borderColor='gray.500' fontSize="l">Operation type</Th>
-                            <Th borderColor='gray.500' fontSize="l">Timestamp</Th>
-                            <Th borderColor='gray.500' fontSize="l" isNumeric>Amount</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {props.transactions.map((transaction) => 
-                            <TransactionRow key={transaction.timestamp} transaction={transaction}/>
-                        )}
-                    </Tbody>
-                </Table>
-            </TableContainer>
+            <TransactionTable transactions={props.transactions} />
         </Box>
+    );
+}
+
+function TransactionTable({transactions}) {
+    return (
+        <TableContainer mt={5}>
+            <Table>
+                <Thead>
+                    <Tr>
+                        <Th borderColor='gray.500'></Th>
+                        <Th display={{ base: "none", md: "block" }} borderColor='gray.500' fontSize="l">Operation type</Th>
+                        <Th borderColor='gray.500' fontSize="l">Timestamp</Th>
+                        <Th borderColor='gray.500' fontSize="l" isNumeric>Amount</Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    {transactions.map((transaction) => 
+                        <TransactionRow key={transaction.timestamp} transaction={transaction}/>
+                    )}
+                </Tbody>
+            </Table>
+        </TableContainer>
     );
 }
 
@@ -114,7 +120,7 @@ function TransactionRow({transaction}) {
     return (
         <Tr>
             <Td borderColor='gray.300'>{getPic(transaction.type, isIssuer)}</Td>
-            <Td borderColor='gray.300'><b>{getOperationType(transaction.type)}</b></Td>
+            <Td display={{ base: "none", md: "table-cell" }} borderColor='gray.300'><b>{getOperationType(transaction.type)}</b></Td>
             <Td borderColor='gray.300'>{stringToDateString(transaction.timestamp)}</Td>
             {getAmountFormatted(transaction, email)}
         </Tr>
