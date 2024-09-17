@@ -46,18 +46,18 @@ export default function Transaction() {
 
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.50')}>
-            <Grid gridTemplateColumns={'20% 80%'}>
+            <Grid gridTemplateColumns={{base: '100% 0%', md: '20% 80%'}}>
+                <Sidebar />
                 <GridItem>
-                    <Sidebar />
                 </GridItem>
                 <GridItem>
                     <Box p="4"> {balance === null ? <CircularProgress isIndeterminate color='blue.300' size='20' /> :
                         <>
-                            <Heading>
+                            <Heading mt={{ base: "0", md: "50" }}>
                                 New transfer
                             </Heading>
-                            <BalanceCard balance={balance}/>
-                            <Grid gridTemplateColumns={'50% 50%'}>
+                            <BalanceCard balance={balance} withButton={false}/>
+                            <Grid gridTemplateColumns={{base: '100% 0%', md: '50% 50%'}}>
                                 <GridItem>
                                     <TransactionForm setIsRefreshNeeded={setIsRefreshNeeded} />
                                 </GridItem>

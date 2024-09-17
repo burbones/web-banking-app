@@ -55,7 +55,7 @@ export default function Dashboard() {
                             <Heading mt={{ base: "0", md: "50" }}>
                                 Hello, {getUserName(user)}!
                             </Heading>
-                            <BalanceCard balance={data.balance} />
+                            <BalanceCard balance={data.balance} withButton={true} />
                             <TransactionList transactions={data.transactions} changeSelection={setSelection} />
                         </>
                     }
@@ -75,7 +75,7 @@ function TransactionList(props) {
                 </Text>
 
                 <Select
-                    placeholder="Choose period"
+                    placeholder="Period"
                     maxWidth={{ base: "30%", md: "20%" }}
                     bg={useColorModeValue('purple.100')}
                     onChange={(e) => props.changeSelection(e.target.value)}

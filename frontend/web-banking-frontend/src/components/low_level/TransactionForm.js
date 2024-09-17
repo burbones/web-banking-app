@@ -73,7 +73,7 @@ export default function TransactionForm(props) {
         {({ isSubmitting }) => (
           <Form h="100%">
             <Grid h="100%" w="100%" placeItems="left">
-                <Flex direction='column' justify='space-around' boxShadow="xl" borderRadius="md" w="30vw" bgColor='white'>
+                <Flex direction='column' justify='space-around' boxShadow="xl" borderRadius="md" w={{ base: "90vw", md: "30vw" }} bgColor='white'>
                     <Stack p="4" pl="10" pr="10" spacing="5">
                         <Heading as='h1' pt={10} mb={10}>Transfer details</Heading>
                         
