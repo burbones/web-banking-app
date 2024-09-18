@@ -5,6 +5,7 @@ const login = require('./routes/login');
 const logout = require('./routes/logout');
 const dashboard = require('./routes/dashboard');
 const transaction = require('./routes/transaction');
+const transactions = require('./routes/transactions');
 const fox = require('./routes/fox');
 const connectDB = require('./db_connection');
 const initAuthorizationSchema = require('./create-schema');
@@ -33,6 +34,7 @@ app.use(baseURL + "/logout", logout);
 app.use(baseURL + "/dashboard", dashboard);
 app.use(baseURL + "/transaction", transaction);
 app.use(baseURL + "/fox", fox);
+app.use(baseURL + "/transactions", transactions);
 
 const start = async () => {
     try {
