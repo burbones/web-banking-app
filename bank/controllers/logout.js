@@ -1,5 +1,6 @@
 const Errors = require("../constants/errors.js");
 const Blacklist = require("../models/Blacklist.js");
+const logger = require("../utils/logger.js");
 
 const logout = async (req, res) => {
     try {
@@ -15,8 +16,10 @@ const logout = async (req, res) => {
     
         await newBlacklist.save();
     
+        logger.info({token}, "The user is logged out");
         res.status(200).json({ message: "You are logged out!" });
     } catch (error) {
+        logger.error(error);
         res.status(500).json({ error: Errors.SERVER_ERROR});
     }
 

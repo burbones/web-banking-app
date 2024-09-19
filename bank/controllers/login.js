@@ -5,6 +5,7 @@ const User = require('../models/User.js');
 
 const { secretKey } = require('../constants/constants.js');
 const Errors = require('../constants/errors.js');
+const logger = require('../utils/logger.js');
 const timeToExpireJWT = "1h";
 
 const login = async (req, res) => {
@@ -17,13 +18,16 @@ const login = async (req, res) => {
 
         const hashesMatch = await bcrypt.compare(req.body.password, curUser.hashedPassword);
         if (!hashesMatch) {
+            logger.warn({user: curUser}, "New failed login");
             res.status(401).json({error: Errors.INVALID_CREDENTIALS});
         } else {
             const token = jwt.sign({email: curUser.email}, secretKey, { expiresIn: timeToExpireJWT});
+            logger.info({user: curUser}, "New login");
             res.status(200).json(token);
         }
 
     } catch (error) {
+        logger.error(error);
         res.status(500).json({ error: Errors.SERVER_ERROR });
     }
 }

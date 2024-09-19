@@ -1,6 +1,7 @@
 const User = require('../models/User.js');
 const Transaction = require('../models/Transaction.js');
 const Errors = require('../constants/errors.js');
+const logger = require('../utils/logger.js');
 
 const doTransaction = async (req, res) => {
     try {
@@ -21,6 +22,7 @@ const doTransaction = async (req, res) => {
 
             await execute(issuer, acquirer, req.body);
 
+            logger.info({issuer, acquirer}, "New transaction");
             res.status(200).json( { message: "Successful transaction" });
 
         } else {
@@ -28,7 +30,7 @@ const doTransaction = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).json({ error: Errors.SERVER_ERROR });
     }
 }

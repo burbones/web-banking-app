@@ -1,5 +1,6 @@
 const Transaction = require('../models/Transaction.js');
 const User = require('../models/User.js');
+const logger = require('../utils/logger.js');
 
 const getDashboard = async (req, res) => {
     let { page, limit, periodStart } = req.query;
@@ -25,7 +26,7 @@ const getDashboard = async (req, res) => {
             transactions: transactions.docs
         });
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).json({ error: Errors.SERVER_ERROR });
     }
 }

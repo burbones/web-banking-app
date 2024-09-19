@@ -3,6 +3,7 @@ const nodemailer = require('nodemailer');
 
 const User = require('../models/User.js');
 const Errors = require('../constants/errors.js');
+const logger = require('../utils/logger.js');
 
 const createUser = async (req, res) => {
     const newUser = new User({
@@ -13,7 +14,7 @@ const createUser = async (req, res) => {
 
     try {
         const newUserFull = await newUser.save();
-        console.log(newUserFull);
+        logger.info({newUser: newUserFull}, "New user was created");
 
         sendEmail(newUserFull.email, "" + newUserFull.code);
 
@@ -23,7 +24,7 @@ const createUser = async (req, res) => {
         if (error.code == 11000) {
             return res.status(409).json({error: Errors.USER_EXISTS});
         }
-        console.log(error);
+        logger.error(error);
         res.status(500).json({error: Errors.SERVER_ERROR})
     }
 };
@@ -63,12 +64,14 @@ const verifyCode = async (req, res) => {
             curUser.isActive = true;
             await curUser.save();
 
+            logger.info({user: curUser}, "The user email is verified");
             res.status(200).json({message: "Correct code"});
         } else {
             await User.deleteOne({ _id: curUser._id});
             res.status(401).json({ error: Errors.INCORRECT_DATA});
         }
     } catch (error) {
+        logger.error(error);
         res.status(500).json({ error: Errors.SERVER_ERROR});
     }
 };

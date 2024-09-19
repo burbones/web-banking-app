@@ -21,8 +21,9 @@ const corsOptions = {
     optionsSuccessStatus: 200,
     methods: ['GET', 'POST', 'DELETE'],
 };
- 
 app.use(cors(corsOptions));
+
+const logger = require('./utils/logger');
 
 const baseURL = "/api/v1";
 
@@ -39,17 +40,17 @@ app.use(baseURL + "/transactions", transactions);
 const start = async () => {
     try {
         await connectDB(mongoURI);
-        console.log("MongoDB is now running");
+        logger.info("MongoDB is now running");
 
         await initAuthorizationSchema();
         await addAdmin();
-        console.log("Authorization system is on");
+        logger.info("Authorization system is on");
 
         app.listen(serverPort, () => {
-            console.log(`The server is listening on port ${serverPort}`);
+            logger.info(`The server is listening on port ${serverPort}`);
         });
     } catch (error) {
-        console.log(error);
+        logger.fatal(error);
     }
 }
 

@@ -6,7 +6,7 @@ const getTransactions = async (req, res) => {
         const transactions = await Transaction.find();
         res.status(200).json({transactions});
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(500).json({ error: Errors.SERVER_ERROR });
     }
 };

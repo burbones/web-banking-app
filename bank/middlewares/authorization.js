@@ -1,5 +1,6 @@
 const Errors = require('../constants/errors.js');
 const permify = require('@permify/permify-node');
+const logger = require('../utils/logger.js');
 
 const client = new permify.grpc.newClient({
     endpoint: `${process.env.PERMIFY_HOST}:${process.env.PERMIFY_GRPC_PORT}`,
@@ -43,6 +44,7 @@ const checkPermissions = (permissionType) => {
                 next();
             }
         } catch (err) {
+            logger.error(err);
             res.status(500).json( {error: Errors.SERVER_ERROR} );
         }
     }
