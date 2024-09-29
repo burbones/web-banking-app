@@ -29,8 +29,7 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-        if (selection !== -1) {
-            console.log("Sending data: " + page);
+        if (selection !== -1) { 
             const params = {
                 page,
                 periodStart: getStart(selection),
@@ -106,7 +105,7 @@ function TransactionList(props) {
             </Flex>
             <TransactionTable transactions={props.transactions} />
             <Center>
-                {!props.lastPage ? <Button minW="10%" mb="10" mt="10" colorScheme="purple" onClick={() => {
+                {props.transactions.length !== 0 && !props.lastPage ? <Button minW="10%" mb="10" mt="10" colorScheme="purple" onClick={() => {
                     props.setPage(props.page + 1);
                 }}>See more</Button> : null}
             </Center>

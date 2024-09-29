@@ -1,4 +1,4 @@
-import { Button, Center, Flex, Grid, Heading, Image, Stack, Text, useToast } from "@chakra-ui/react";
+import { Button, Center, Flex, Grid, Heading, Image, Stack, Text } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { InputControl } from "formik-chakra-ui";
 
@@ -11,16 +11,18 @@ import { useNavigate } from "react-router-dom";
 
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { Link as ChakraLink } from '@chakra-ui/react';
+import { useState } from "react";
 
 export default function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const toast = useToast();
+  const [errorMessage, setErrorMessage] = useState(null);
 
   return (
       <Formik
       initialValues={{ email: '', password: '' }}
       validate={values => {
+        setErrorMessage(null);
         const errors = {};
         if (!values.email) {
           errors.email = '*Required';
@@ -39,12 +41,7 @@ export default function LoginForm() {
               navigate(DASHBOARD_URL);
             })
             .catch((error) => {
-              toast({
-                position: 'top-center',
-                title: error.response.data.error,
-                status: "error",
-                duration: 5000,
-              });
+              setErrorMessage(error.response.data.error);
             })
           setSubmitting(false);
       }}
@@ -62,6 +59,9 @@ export default function LoginForm() {
                       <InputControl type="email" name="email" inputProps={{type: "email", placeholder: "Enter Email..."}}/>
                       <InputControl type="password" name="password" inputProps={{type: "password", placeholder: "Enter Password..."}}/>
                   </Stack>
+                  <Center>
+                    <Text color="red">{errorMessage}</Text>
+                  </Center>
                   <Center>
                       <Button
                           minW="20%"

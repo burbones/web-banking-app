@@ -4,8 +4,6 @@ const logger = require('../utils/logger.js');
 
 const getDashboard = async (req, res) => {
     let { page, limit, periodStart } = req.query;
-
-    console.log(page);
     
     page = page ? page : 1;
     limit = 10;
