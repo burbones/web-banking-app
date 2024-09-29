@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "./low_level/Sidebar";
-import { Box, CircularProgress, Flex, Grid, GridItem, Heading, Image, Select, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
+import { Box, Button, Center, CircularProgress, Flex, Grid, GridItem, Heading, Image, Select, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios, { HttpStatusCode } from "axios";
 import { LOGIN_URL, SERVER_DASHBOARD_URL } from "../utils/constants";
@@ -14,14 +14,25 @@ import BalanceCard from "./low_level/BalanceCard";
 export default function Dashboard() {
     const [data, setData] = useState(null);
     const [selection, setSelection] = useState(null);
+    const [page, setPage] = useState(1);
+    const [lastPage, setLastPage] = useState(false);
+
     const token = useSelector((state) => state.auth.token);
     const user = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const changeSelection = (newSelection) => {
+        setData({...data, transactions: []});
+        setPage(1);
+        setSelection(newSelection);
+    }
+
     useEffect(() => {
         if (selection !== -1) {
+            console.log("Sending data: " + page);
             const params = {
+                page,
                 periodStart: getStart(selection),
             };
             axios.get(SERVER_DASHBOARD_URL, {
@@ -31,7 +42,14 @@ export default function Dashboard() {
                 params,
             })
             .then((res) => {
-                setData(res.data);
+                const newTransactionList = data ? [...data.transactions, ...res.data.transactions] : [];
+                
+                setData({balance: res.data.balance, transactions: newTransactionList});
+                if (res.data.transactions.length === 0) {
+                    setLastPage(true);
+                } else {
+                    setLastPage(false);
+                }
             })
             .catch((err) => {
                 if (err.status === HttpStatusCode.Unauthorized) {
@@ -40,7 +58,7 @@ export default function Dashboard() {
                 }
             })
         }
-    }, [token, navigate, dispatch, selection]);
+    }, [token, navigate, dispatch, page, selection]);
 
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.50')}>
@@ -56,7 +74,7 @@ export default function Dashboard() {
                                 Hello, {getUserName(user)}!
                             </Heading>
                             <BalanceCard balance={data.balance} withButton={true} />
-                            <TransactionList transactions={data.transactions} changeSelection={setSelection} />
+                            <TransactionList transactions={data.transactions} changeSelection={changeSelection} page={page} setPage={setPage} lastPage={lastPage} />
                         </>
                     }
                     </Box>
@@ -87,6 +105,11 @@ function TransactionList(props) {
                 </Select>
             </Flex>
             <TransactionTable transactions={props.transactions} />
+            <Center>
+                {!props.lastPage ? <Button minW="10%" mb="10" mt="10" colorScheme="purple" onClick={() => {
+                    props.setPage(props.page + 1);
+                }}>See more</Button> : null}
+            </Center>
         </Box>
     );
 }
