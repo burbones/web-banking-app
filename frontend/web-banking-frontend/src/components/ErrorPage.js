@@ -1,9 +1,11 @@
 import { Box, Button, Card, Flex, Grid, GridItem, Heading, Image, Stack, Text, useColorModeValue } from "@chakra-ui/react";
-import pageNotFound from "../img/Scarecrow.png";
 import Footing from "./Footing";
 import { useNavigate } from "react-router-dom";
 import { DASHBOARD_URL, LOGIN_URL } from "../utils/constants";
 import { useSelector } from "react-redux";
+
+import pageNotFound from "../img/Scarecrow.png";
+import error404 from "../img/404.png";
 
 export default function ErrorPage() {
     const user = useSelector((state) => state.auth.user);
@@ -27,7 +29,7 @@ export default function ErrorPage() {
                         <Flex h="100%" alignItems="center" ml="10">
                             <Image
                                 src={pageNotFound}
-                                alt="inspirational citation"
+                                alt="error 404"
                                 borderRadius="20"
                                 mb="20"
                             />
@@ -36,8 +38,9 @@ export default function ErrorPage() {
                     </GridItem>
                     
                     <GridItem>
-                        <Flex h="100%" alignItems="center" justifyContent="center">
-                            <Card w="50%" p="10">
+                        <Flex h="100%" alignItems="center" justifyContent="center" flexDirection="column">
+                            <Image src={error404} alt="error 404" display={{base: "flex", md: "none"}} />
+                            <Card w={{base: "80vw", md: "50%"}} p="10">
                                 <Stack>
                                     <Heading as="h1" mb="5">PAGE NOT FOUND</Heading>
                                     <Text fontSize="xl" mb="10">The page you are looking for doesn't exist.</Text>

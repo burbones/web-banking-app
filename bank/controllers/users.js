@@ -11,3 +11,7 @@ const getUsers = async (req, res) => {
         res.status(500).json({ error: Errors.SERVER_ERROR });
     }
 }
+
+module.exports = {
+    getUsers
+}
