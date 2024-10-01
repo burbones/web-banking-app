@@ -1,9 +1,9 @@
-const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
 const User = require('../models/User.js');
 const Errors = require('../constants/errors.js');
 const logger = require('../utils/logger.js');
+const { encrypt } = require('../constants/constants.js');
 
 const createUser = async (req, res) => {
     const newUser = new User({
@@ -75,13 +75,6 @@ const verifyCode = async (req, res) => {
         res.status(500).json({ error: Errors.SERVER_ERROR});
     }
 };
-
-const encrypt = async (str) => {
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-
-    return await bcrypt.hash(str, salt);
-}
 
 module.exports = {
     createUser,

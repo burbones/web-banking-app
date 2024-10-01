@@ -43,7 +43,13 @@ const start = async () => {
         logger.info("MongoDB is now running");
 
         await initAuthorizationSchema();
-        await addAdmin();
+        try {
+            await addAdmin();
+        } catch (error) {
+            logger.error(error);
+            throw new Error(error);
+        }
+        
         logger.info("Authorization system is on");
 
         app.listen(serverPort, () => {

@@ -6,6 +6,7 @@ const Errors = {
     NO_USER: "No such user",
     USER_EXISTS: "User with this email already exists",
     SERVER_ERROR: "Internal server error",
+    CONFIG_ERROR: "Essential config data is missing",
 }
 
 module.exports = Errors;
