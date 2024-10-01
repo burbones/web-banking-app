@@ -3,7 +3,7 @@ import Sidebar from "./low_level/Sidebar";
 import { Box, Button, Center, CircularProgress, Flex, Grid, GridItem, Heading, Image, Select, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios, { HttpStatusCode } from "axios";
-import { LOGIN_URL, SERVER_DASHBOARD_URL, userSidebarItems } from "../utils/constants";
+import { LOGIN_URL, SERVER_DASHBOARD_URL, userSidebarItems, stringToDateString } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../authSlice";
 
@@ -148,10 +148,6 @@ function TransactionRow({transaction}) {
             {getAmountFormatted(transaction, email)}
         </Tr>
     );
-}
-
-function stringToDateString(str) {
-    return new Date(Date.parse(str)).toDateString();
 }
 
 function getAmountFormatted(transaction, email) {

@@ -32,7 +32,7 @@ export default function Sidebar(props) {
         onOverlayClick={onClose}
         size="full">
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent onClose={onClose} itemList={props.itemList} />
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
