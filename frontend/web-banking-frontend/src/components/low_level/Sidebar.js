@@ -12,29 +12,18 @@ import {
   IconButton,
 } from '@chakra-ui/react';
 import {
-  FiHome,
-  FiLogOut,
   FiMenu,
 } from 'react-icons/fi';
-import { FaMoneyBillTransfer } from 'react-icons/fa6';
+
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { DASHBOARD_URL, LOGIN_URL, SERVER_LOGOUT_URL, TRANSFERS_URL } from '../../utils/constants';
-import { setUser } from '../../authSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 
-const LinkItems = [
-  { name: 'Dashboard', icon: FiHome, to: DASHBOARD_URL },
-  { name: 'Transfer money', icon: FaMoneyBillTransfer, to: TRANSFERS_URL },
-  { name: 'Log out', icon: FiLogOut, to: LOGIN_URL, handleClick: logout },
-];
-
-export default function Sidebar() {
+export default function Sidebar(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   
   return (
     <>
-      <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
+      <SidebarContent onClose={() => onClose} itemList={props.itemList} display={{ base: 'none', md: 'block' }} />
       <Drawer
         isOpen={isOpen}
         placement="left"
@@ -52,7 +41,7 @@ export default function Sidebar() {
   )
 }
 
-const SidebarContent = ({onClose, ...rest} ) => {
+const SidebarContent = ({onClose, itemList, ...rest} ) => {
   return (
     <Box
       bg={useColorModeValue('white', 'gray.900')}
@@ -66,7 +55,7 @@ const SidebarContent = ({onClose, ...rest} ) => {
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
+      {itemList.map((link) => (
         <NavItem key={link.name} icon={link.icon} to={link.to} handleClick={link.handleClick}>
             {link.name}
         </NavItem>
@@ -136,14 +125,4 @@ const MobileNav = ({ onOpen, ...rest }) => {
       />
     </Flex>
   )
-}
-
-function logout(dispatch, token) {
-  axios.delete(SERVER_LOGOUT_URL, {
-    headers: {
-      'Authorization': 'Bearer ' + token
-    },
-  });
-
-  dispatch(setUser({user: "", token: ""}));
 }

@@ -3,7 +3,7 @@ import Sidebar from "./low_level/Sidebar";
 import { Box, Button, Center, CircularProgress, Flex, Grid, GridItem, Heading, Image, Select, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios, { HttpStatusCode } from "axios";
-import { LOGIN_URL, SERVER_DASHBOARD_URL } from "../utils/constants";
+import { LOGIN_URL, SERVER_DASHBOARD_URL, userSidebarItems } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../authSlice";
 
@@ -61,7 +61,7 @@ export default function Dashboard() {
 
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.50')}>
-            <Sidebar />
+            <Sidebar itemList={userSidebarItems} />
             <Grid gridTemplateColumns={{base: '0% 100%', md: '20% 80%'}}>
                 <GridItem>
                    
@@ -101,6 +101,7 @@ function TransactionList(props) {
                     <option value='day'>Day</option>
                     <option value='week'>Week</option>
                     <option value='month'>Month</option>
+                    <option value='all'>All</option>
                 </Select>
             </Flex>
             <TransactionTable transactions={props.transactions} />
@@ -196,6 +197,9 @@ function getStart(selection) {
         }
         case "month": {
             return new Date(d.getFullYear(), d.getMonth(), 1);
+        }
+        case "all": {
+            return new Date(0);
         }
         default: {
             return d;

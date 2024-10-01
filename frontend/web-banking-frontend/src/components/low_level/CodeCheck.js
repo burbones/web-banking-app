@@ -38,7 +38,7 @@ export default function CodeCheck(props) {
         {({ isSubmitting }) => (
           <Form h="100%">
             <Grid h="100%" w="100%" placeItems="center">
-                <Flex direction='column' justify='space-between' boxShadow="xl" borderRadius="md" h="80vh" w="30vw">
+                <Flex direction='column' justify='space-between' boxShadow="xl" borderRadius="md" h="80vh" w="30vw" bgColor="white">
                     <Stack p="4" spacing="5">
                         <Heading as='h1' pt={10}>Email verification</Heading>
 

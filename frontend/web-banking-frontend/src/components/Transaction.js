@@ -3,7 +3,7 @@ import Sidebar from "./low_level/Sidebar";
 import BalanceCard from "./low_level/BalanceCard";
 import { useEffect, useState } from "react";
 import axios, { HttpStatusCode } from "axios";
-import { LOGIN_URL, SERVER_DASHBOARD_URL } from "../utils/constants";
+import { LOGIN_URL, SERVER_DASHBOARD_URL, userSidebarItems } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../authSlice";
@@ -47,7 +47,7 @@ export default function Transaction() {
     return (
         <Box minH="100vh" bg={useColorModeValue('gray.50')}>
             <Grid gridTemplateColumns={{base: '100% 0%', md: '20% 80%'}}>
-                <Sidebar />
+                <Sidebar itemList={userSidebarItems}/>
                 <GridItem>
                 </GridItem>
                 <GridItem>
