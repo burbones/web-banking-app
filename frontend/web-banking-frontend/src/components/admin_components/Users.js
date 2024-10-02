@@ -28,6 +28,26 @@ export default function Users() {
             return list.filter((user) => user.email.toLowerCase().includes(searchValue.toLowerCase()));
         }
     }
+
+    const deleteUser = (email) => {
+        axios.delete(SERVER_USERS_URL, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            params: {
+                email,
+            }
+        })
+        .then(() => {
+            setUsers(users.filter(user => user.email !== email));
+        })
+        .catch((err) => {
+            if (err.status === HttpStatusCode.Unauthorized) {
+                dispatch(setUser({token: ""}));
+                navigate(LOGIN_URL);
+            }
+        })
+    }
     
     useEffect(() => {
         axios.get(SERVER_USERS_URL, {
@@ -74,7 +94,7 @@ export default function Users() {
                                     value={searchValue}
                                     onChange={handleSearchChange}
                                  />
-                                <UserList users={filterUsers(users)} />
+                                <UserList users={filterUsers(users)} deleteUser={deleteUser} />
                             </Box>
                         </GridItem>
                     </Grid>
@@ -86,7 +106,7 @@ export default function Users() {
     return content;
 }
 
-function UserList( {users} ) {
+function UserList( {users, deleteUser} ) {
     return (
         <TableContainer mt={5} mr={5}>
             <Table>
@@ -102,7 +122,7 @@ function UserList( {users} ) {
                 </Thead>
                 <Tbody>
                     {users.map((user) => 
-                        <UserRow key={user._id} user={user}/>
+                        <UserRow key={user._id} user={user} deleteUser={deleteUser} />
                     )}
                 </Tbody>
             </Table>
@@ -110,10 +130,10 @@ function UserList( {users} ) {
     );
 }
 
-function UserRow( {user} ) {
+function UserRow( {user, deleteUser} ) {
     return (
         <Tr>
-            <Td borderColor='gray.300'><IconButton icon={<FiTrash2 />} /></Td>
+            <Td borderColor='gray.300'><IconButton icon={<FiTrash2 />} onClick={() => deleteUser(user.email)} /></Td>
             <Td borderColor='gray.300'>{user.email}</Td>
             <Td borderColor='gray.300'>{new Date(Date.parse(user.creationTime)).toUTCString()}</Td>
             <Td borderColor='gray.300'>{user.isActive ? "True" : "False"}</Td>
