@@ -29,9 +29,10 @@ const addAdmin = async () => {
         const adminUserFull = await adminUser.save();
 
         logger.info({admin: adminUserFull}, "Admin user was created");
-        await addAdminRole(adminEmail);
-        logger.info({adminEmail}, "Admin role was granted");
     }
+
+    await addAdminRole(adminEmail);
+    logger.info({adminEmail}, "Admin role was granted");
 }
 
 const addAdminRole = async (adminEmail) => {

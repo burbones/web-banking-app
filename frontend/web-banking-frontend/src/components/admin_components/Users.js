@@ -1,5 +1,5 @@
-import { Box, Button, CircularProgress, Grid, GridItem, Heading, IconButton, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
-import { adminSidebarItems, LOGIN_URL, SERVER_USERS_URL, stringToDateString } from "../../utils/constants";
+import { Box, Button, CircularProgress, Grid, GridItem, Heading, IconButton, Input, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
+import { adminSidebarItems, LOGIN_URL, SERVER_USERS_URL } from "../../utils/constants";
 import Sidebar from "../low_level/Sidebar";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,9 +12,22 @@ import { FiTrash2 } from "react-icons/fi";
 export default function Users() {
     const [users, setUsers] = useState(null);
     const [isForbidden, setIsForbidden] = useState(false);
+    const [searchValue, setSearchValue] = useState("");
+
     const token = useSelector((state) => state.auth.token);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const handleSearchChange = (e) => {
+        const searchValue = e.target.value;
+        setSearchValue(searchValue);
+    }
+
+    const filterUsers = (list) => {
+        if (list) {
+            return list.filter((user) => user.email.toLowerCase().includes(searchValue.toLowerCase()));
+        }
+    }
     
     useEffect(() => {
         axios.get(SERVER_USERS_URL, {
@@ -56,7 +69,12 @@ export default function Users() {
                                 <Text fontSize='xl'>
                                     <b>Users:</b>
                                 </Text>
-                                <UserList users={users} />
+                                <Input 
+                                    variant='flushed' placeholder='Type to find users' mt='5' w='50%'
+                                    value={searchValue}
+                                    onChange={handleSearchChange}
+                                 />
+                                <UserList users={filterUsers(users)} />
                             </Box>
                         </GridItem>
                     </Grid>
