@@ -43,7 +43,7 @@ export default function CodeCheck(props) {
                         <Heading as='h1' pt={10}>Email verification</Heading>
 
                         <Text>
-                            A verification code was sent to the email example@example.org.
+                            A verification code was sent to the email {props.email}.
                         </Text>
                         <Text>
                             Please, enter the code below:

@@ -26,6 +26,9 @@ export default function SignupForm(props) {
         ) {
           errors.email = 'Invalid email address';
         }
+        if (!/^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i.test(values.phone)) {
+          errors.phone = 'Invalid phone number';
+        }
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
