@@ -150,7 +150,7 @@ function TransactionRow({transaction}) {
     );
 }
 
-function getAmountFormatted(transaction, email) {
+export function getAmountFormatted(transaction, email) {
     let color, str;
     const amount = (+transaction.amount / 100).toFixed(2);
 
@@ -164,7 +164,7 @@ function getAmountFormatted(transaction, email) {
     return <Td borderColor='gray.300' color={color} isNumeric>{str}</Td>;
 }
 
-function getOperationType(type) {
+export function getOperationType(type) {
     if (type === "send") {
         return "Transfer";
     }

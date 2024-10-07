@@ -3,7 +3,7 @@ const Errors = require('../constants/errors');
 
 const getTransactions = async (req, res) => {
     try {
-        const transactions = await Transaction.find();
+        const transactions = await Transaction.find().sort({timestamp: 'desc', issuer: 'asc'});
         res.status(200).json({transactions});
     } catch (error) {
         logger.error(error);

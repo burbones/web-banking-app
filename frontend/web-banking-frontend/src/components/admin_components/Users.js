@@ -15,8 +15,6 @@ export default function Users() {
     const [searchValue, setSearchValue] = useState("");
     const [chosenUser, setChosenUser] = useState(null);
 
-    console.log(chosenUser);
-
     const cancelRef = useRef();
 
     const { isOpen, onOpen, onClose } = useDisclosure();

@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import { LOGIN, SIGN_UP, DASHBOARD, TRANSACTION, ADMIN_USERS }
+import { LOGIN, SIGN_UP, DASHBOARD, TRANSACTION, ADMIN_USERS, ADMIN_TRANSACTIONS }
    from "./constants";
 
 import App from "../App";
@@ -11,6 +11,7 @@ import Dashboard from "../components/Dashboard";
 import Transaction from "../components/Transaction";
 import ErrorPage from "../components/ErrorPage";
 import Users from "../components/admin_components/Users";
+import Transanctions from "../components/admin_components/Transactions";
 
 export const router = createBrowserRouter([
     {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
             {
                 path: ADMIN_USERS,
                 element: <Users />
+            },
+            {
+                path: ADMIN_TRANSACTIONS,
+                element: <Transanctions />
             }
         ]
     }

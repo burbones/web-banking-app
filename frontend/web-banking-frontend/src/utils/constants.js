@@ -20,6 +20,7 @@ export const SIGN_UP = "signup";
 export const DASHBOARD = "dashboard";
 export const TRANSACTION = "transaction";
 export const ADMIN_USERS = "admin/users";
+export const ADMIN_TRANSACTIONS = "admin/transactions";
 
 export const SIGNUP_URL = "/signup";
 export const LOGIN_URL = "/login";
@@ -37,6 +38,7 @@ export const SERVER_DASHBOARD_URL = getBaseServerURL() + SERVER_PREFIX + DASHBOA
 export const SERVER_TRANSACTION_URL = getBaseServerURL() + SERVER_PREFIX + TRANSFERS_URL;
 export const SERVER_LOGOUT_URL = getBaseServerURL() + SERVER_PREFIX + "/logout";
 export const SERVER_USERS_URL = getBaseServerURL() + SERVER_PREFIX + "/users";
+export const SERVER_TRANSACTIONS_URL = getBaseServerURL() + SERVER_PREFIX + "/transactions";
 
 function logout(dispatch, token) {
     axios.delete(SERVER_LOGOUT_URL, {
