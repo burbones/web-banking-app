@@ -1,7 +1,7 @@
-import { Box, Button, CircularProgress, Grid, GridItem, Heading, IconButton, Input, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, CircularProgress, Grid, GridItem, Heading, IconButton, Input, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { adminSidebarItems, LOGIN_URL, SERVER_USERS_URL } from "../../utils/constants";
 import Sidebar from "../low_level/Sidebar";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios, { HttpStatusCode } from "axios";
 import { setUser } from "../../authSlice";
@@ -13,7 +13,13 @@ export default function Users() {
     const [users, setUsers] = useState(null);
     const [isForbidden, setIsForbidden] = useState(false);
     const [searchValue, setSearchValue] = useState("");
+    const [chosenUser, setChosenUser] = useState(null);
 
+    console.log(chosenUser);
+
+    const cancelRef = useRef();
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const token = useSelector((state) => state.auth.token);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -40,6 +46,7 @@ export default function Users() {
         })
         .then(() => {
             setUsers(users.filter(user => user.email !== email));
+            onClose();
         })
         .catch((err) => {
             if (err.status === HttpStatusCode.Unauthorized) {
@@ -94,7 +101,9 @@ export default function Users() {
                                     value={searchValue}
                                     onChange={handleSearchChange}
                                  />
-                                <UserList users={filterUsers(users)} deleteUser={deleteUser} />
+                                <UserList users={filterUsers(users)} setChosenUser={setChosenUser} onDelete={onOpen} />
+
+                                <DeletionAlert isOpen={isOpen} onClose={onClose} chosenUser={chosenUser} deleteUser={deleteUser} cancelRef={cancelRef} />
                             </Box>
                         </GridItem>
                     </Grid>
@@ -106,7 +115,7 @@ export default function Users() {
     return content;
 }
 
-function UserList( {users, deleteUser} ) {
+function UserList( {users, setChosenUser, onDelete} ) {
     return (
         <TableContainer mt={5} mr={5}>
             <Table>
@@ -122,7 +131,7 @@ function UserList( {users, deleteUser} ) {
                 </Thead>
                 <Tbody>
                     {users.map((user) => 
-                        <UserRow key={user._id} user={user} deleteUser={deleteUser} />
+                        <UserRow key={user._id} user={user} setChosenUser={setChosenUser} onDelete={onDelete} />
                     )}
                 </Tbody>
             </Table>
@@ -130,10 +139,16 @@ function UserList( {users, deleteUser} ) {
     );
 }
 
-function UserRow( {user, deleteUser} ) {
+function UserRow( {user, setChosenUser, onDelete} ) {
+
+    const handleDelete = () => {
+        setChosenUser(user.email);
+        onDelete();
+    }
+
     return (
         <Tr>
-            <Td borderColor='gray.300'><IconButton icon={<FiTrash2 />} onClick={() => deleteUser(user.email)} /></Td>
+            <Td borderColor='gray.300'><IconButton icon={<FiTrash2 />} onClick={handleDelete} /></Td>
             <Td borderColor='gray.300'>{user.email}</Td>
             <Td borderColor='gray.300'>{new Date(Date.parse(user.creationTime)).toUTCString()}</Td>
             <Td borderColor='gray.300'>{user.isActive ? "True" : "False"}</Td>
@@ -144,5 +159,32 @@ function UserRow( {user, deleteUser} ) {
                 </Button>
             </Td>
         </Tr>
+    );
+}
+
+function DeletionAlert( {isOpen, onClose, chosenUser, deleteUser, cancelRef}) {
+    return (
+        <AlertDialog isOpen={isOpen} onClose={onClose}>
+            <AlertDialogOverlay>
+                <AlertDialogContent>
+                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                        Delete user
+                    </AlertDialogHeader>
+
+                    <AlertDialogBody>
+                        Are you sure you want to delete user {chosenUser}? You can't undo this action afterwards.
+                    </AlertDialogBody>
+
+                    <AlertDialogFooter>
+                        <Button ref={cancelRef} onClick={onClose}>
+                            Cancel
+                        </Button>
+                        <Button colorScheme='red' onClick={() => deleteUser(chosenUser)} ml={3}>
+                            Delete
+                        </Button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialogOverlay>
+        </AlertDialog>
     );
 }
