@@ -1,5 +1,5 @@
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, CircularProgress, Grid, GridItem, Heading, IconButton, Input, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, useDisclosure } from "@chakra-ui/react";
-import { adminSidebarItems, LOGIN_URL, SERVER_USERS_URL } from "../../utils/constants";
+import { ADMIN_TRANSACTIONS_URL, adminSidebarItems, LOGIN_URL, SERVER_USERS_URL } from "../../utils/constants";
 import Sidebar from "../low_level/Sidebar";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -138,10 +138,15 @@ function UserList( {users, setChosenUser, onDelete} ) {
 }
 
 function UserRow( {user, setChosenUser, onDelete} ) {
+    const navigate = useNavigate();
 
     const handleDelete = () => {
         setChosenUser(user.email);
         onDelete();
+    }
+
+    const navigateToTransactions = () => {
+        navigate(ADMIN_TRANSACTIONS_URL, {state: { user: user.email }});
     }
 
     return (
@@ -152,7 +157,7 @@ function UserRow( {user, setChosenUser, onDelete} ) {
             <Td borderColor='gray.300'>{user.isActive ? "True" : "False"}</Td>
             <Td borderColor='gray.300'>${user.balance / 100}</Td>
             <Td borderColor='gray.300'>
-                <Button colorScheme="purple" variant="link">
+                <Button colorScheme="purple" variant="link" onClick={navigateToTransactions}>
                     See transactions
                 </Button>
             </Td>

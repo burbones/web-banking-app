@@ -1,11 +1,11 @@
-import { Box, CircularProgress, Grid, GridItem, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
+import { Box, CircularProgress, Grid, GridItem, Heading, Select, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
 import { adminSidebarItems, LOGIN_URL, SERVER_TRANSACTIONS_URL } from "../../utils/constants";
 import Sidebar from "../low_level/Sidebar";
 import { getOperationType } from "../Dashboard";
 import { useEffect, useState } from "react";
 import axios, { HttpStatusCode } from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { setUser } from "../../authSlice";
 import ForbiddenErrorPage from "../ForbiddenErrorPage";
 
@@ -17,14 +17,23 @@ export default function Transanctions() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const location = useLocation();
+
+    const [chosenUser, setChosenUser] = useState(!location.state ? null : location.state.user);
+    console.log(chosenUser);
+
     useEffect(() => {
+        const params = {
+            user: chosenUser,
+        };
+
         axios.get(SERVER_TRANSACTIONS_URL, {
             headers: {
                 'Authorization': 'Bearer ' + token
-            }
+            },
+            params,
         })
         .then((res) => {
-            console.log(res.data);
             setTransactions(res.data.transactions);
         })
         .catch((err) => {
@@ -35,9 +44,10 @@ export default function Transanctions() {
                 setIsForbidden(true);
             }
         })
-    }, [dispatch, navigate, token]);
+    }, [dispatch, navigate, token, chosenUser]);
 
     const baseColor = useColorModeValue('gray.50');
+    const selectColor = useColorModeValue('purple.100');
 
     const content = 
         <Box minH="100vh" bg={baseColor}>
@@ -54,6 +64,16 @@ export default function Transanctions() {
                             <Heading mt={{ base: "0", md: "50" }} mb="10">
                                 Transactions
                             </Heading>
+                            <Select
+                                placeholder="All users"
+                                maxWidth={{ base: "30%", md: "20%" }}
+                                bg={selectColor}
+                                onChange={(e) => setChosenUser(e.target.value)}
+                                defaultValue={chosenUser}
+                            >
+                                <option value='asd2@coolmail.xyz'>asd2@coolmail.xyz</option>
+                                <option value='test@test.test'>test@test.test</option>
+                            </Select>
                             <AdminTransactionTable transactions={transactions}/>
                         </Box>
                     </GridItem>
@@ -92,11 +112,11 @@ function TransactionRow({transaction}) {
 
     return (
         <Tr>
-            <Td display={{ base: "none", md: "table-cell" }} borderColor='gray.300'><b>{getOperationType(transaction.type)}</b></Td>
+            <Td w="5%" display={{ base: "none", md: "table-cell" }} borderColor='gray.300'><b>{getOperationType(transaction.type)}</b></Td>
             <Td borderColor='gray.300'>{new Date(Date.parse(transaction.timestamp)).toUTCString()}</Td>
-            <Td borderColor='gray.300'>{transaction.issuer}</Td>
-            <Td borderColor='gray.300'>{transaction.acquirer}</Td>
-            <Td borderColor='gray.300' isNumeric>{(+transaction.amount / 100).toFixed(2)}$</Td>
+            <Td w="20%" borderColor='gray.300'>{transaction.issuer}</Td>
+            <Td w="20%" borderColor='gray.300'>{transaction.acquirer}</Td>
+            <Td w="5%" borderColor='gray.300' isNumeric>{(+transaction.amount / 100).toFixed(2)}$</Td>
         </Tr>
     );
 }
