@@ -61,7 +61,6 @@ export default function Users() {
             }
         })
         .then((res) => {
-            console.log(res.data);
             setUsers(res.data.users);
         })
         .catch((err) => {

@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Grid, GridItem, Heading, Select, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useColorModeValue } from "@chakra-ui/react";
-import { adminSidebarItems, LOGIN_URL, SERVER_TRANSACTIONS_URL } from "../../utils/constants";
+import { adminSidebarItems, LOGIN_URL, SERVER_TRANSACTIONS_URL, SERVER_USERS_URL } from "../../utils/constants";
 import Sidebar from "../low_level/Sidebar";
 import { getOperationType } from "../Dashboard";
 import { useEffect, useState } from "react";
@@ -19,10 +19,28 @@ export default function Transanctions() {
 
     const location = useLocation();
 
+    const [users, setUsers] = useState(null);
     const [chosenUser, setChosenUser] = useState(!location.state ? null : location.state.user);
-    console.log(chosenUser);
 
     useEffect(() => {
+        axios.get(SERVER_USERS_URL, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+        })
+        .then((res) => {
+            console.log(res.data.users);
+            setUsers(res.data.users);
+        })
+        .catch((err) => {
+            if (err.status === HttpStatusCode.Unauthorized) {
+                dispatch(setUser({token: ""}));
+                navigate(LOGIN_URL);
+            } else if (err.status === HttpStatusCode.Forbidden) {
+                setIsForbidden(true);
+            }
+        });
+
         const params = {
             user: chosenUser,
         };
@@ -71,8 +89,9 @@ export default function Transanctions() {
                                 onChange={(e) => setChosenUser(e.target.value)}
                                 defaultValue={chosenUser}
                             >
-                                <option value='asd2@coolmail.xyz'>asd2@coolmail.xyz</option>
-                                <option value='test@test.test'>test@test.test</option>
+                                {users.map((user) => 
+                                    <option key={user.email} value={user.email}>{user.email}</option>
+                                )}
                             </Select>
                             <AdminTransactionTable transactions={transactions}/>
                         </Box>
