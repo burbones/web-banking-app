@@ -29,7 +29,6 @@ export default function Transanctions() {
             },
         })
         .then((res) => {
-            console.log(res.data.users);
             setUsers(res.data.users);
         })
         .catch((err) => {

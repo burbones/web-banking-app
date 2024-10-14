@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, CircularProgress, Grid, GridItem, Heading, IconButton, Input, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, CircularProgress, Grid, GridItem, Heading, IconButton, Image, Input, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { ADMIN_TRANSACTIONS_URL, adminSidebarItems, LOGIN_URL, SERVER_USERS_URL } from "../../utils/constants";
 import Sidebar from "../low_level/Sidebar";
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +8,7 @@ import { setUser } from "../../authSlice";
 import { useNavigate } from "react-router-dom";
 import ForbiddenErrorPage from "../ForbiddenErrorPage";
 import { FiTrash2 } from "react-icons/fi";
+import userManagement from "../../img/user_management.png";
 
 export default function Users() {
     const [users, setUsers] = useState(null);
@@ -97,7 +98,9 @@ export default function Users() {
                                     variant='flushed' placeholder='Type to find users' mt='5' w='50%'
                                     value={searchValue}
                                     onChange={handleSearchChange}
-                                 />
+                                />
+                                <Image pos='absolute' top={10} right={10} opacity="90%" src={userManagement} alt="User management" h='20vh' />
+
                                 <UserList users={filterUsers(users)} setChosenUser={setChosenUser} onDelete={onOpen} />
 
                                 <DeletionAlert isOpen={isOpen} onClose={onClose} chosenUser={chosenUser} deleteUser={deleteUser} cancelRef={cancelRef} />
