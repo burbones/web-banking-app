@@ -2,18 +2,22 @@ import axios, { HttpStatusCode } from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button, Center, Flex, Grid, Heading, Stack, useToast } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, Center, Flex, Grid, Heading, Stack, useDisclosure, useToast } from '@chakra-ui/react';
 import { Form, Formik } from "formik";
 import { InputControl } from "formik-chakra-ui";
 import { LOGIN_URL, SERVER_TRANSACTION_URL } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../../authSlice";
+import { useRef } from "react";
 
 export default function TransactionForm(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const toast = useToast();
     const token = useSelector((state) => state.auth.token);
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const cancelRef = useRef();
   
     return (
         <Formik
@@ -22,11 +26,11 @@ export default function TransactionForm(props) {
           const errors = {};
           if (!values.user) {
             errors.user = '*Required';
-          } /*else if (
+          } else if (
             !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.user)
           ) {
             errors.user = 'Invalid email address';
-          }*/
+          }
 
           if (values.amount <= 0) {
             errors.amount = 'The amount should be greater than zero';
@@ -44,13 +48,7 @@ export default function TransactionForm(props) {
                 },
             })
               .then((res) => {
-                toast({
-                    position: 'bottom-center',
-                    title: "Successful transaction",
-                    status: "success",
-                    duration: 5000,
-                    isClosable: true,
-                  });
+                onOpen();
                 props.setIsRefreshNeeded(true);
                 resetForm();
               })
@@ -95,9 +93,33 @@ export default function TransactionForm(props) {
                     </Center>
                 </Flex>
             </Grid>
-  
+            <SuccessAlert isOpen={isOpen} onClose={onClose} cancelRef={cancelRef} />
           </Form>
         )}
       </Formik>
     );
+}
+
+function SuccessAlert( {isOpen, onClose, cancelRef} ) {
+  return (
+    <AlertDialog isOpen={isOpen} onClose={onClose} isCentered>
+      <AlertDialogOverlay>
+        <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                Successful operation
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+                The transaction is successfully completed.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+                <Button ref={cancelRef} onClick={onClose}>
+                    OK
+                </Button>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialogOverlay>
+    </AlertDialog>
+  );
 }

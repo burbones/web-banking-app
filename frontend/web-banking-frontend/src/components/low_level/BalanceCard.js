@@ -7,7 +7,7 @@ import { TRANSFERS_URL } from "../../utils/constants";
 export default function BalanceCard( {balance, withButton} ) {
     return <Card 
     fontSize='xl'
-    mt={5} mb={5} w={{base: "100%", md: "70%" }}
+    mt={5} mb={10} w={{base: "100%", md: "70%" }}
     overflow='hidden'
     variant='outline'
     direction={{ base: 'column', sm: 'row' }}

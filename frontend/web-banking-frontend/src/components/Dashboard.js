@@ -120,8 +120,8 @@ function TransactionTable({transactions}) {
             <Table>
                 <Thead>
                     <Tr>
-                        <Th borderColor='gray.500'></Th>
-                        <Th display={{ base: "none", md: "block" }} borderColor='gray.500' fontSize="l">Operation type</Th>
+                        <Th borderColor='gray.500' w={{ base: "20vw", md: "8vw" }}></Th>
+                        <Th display={{ base: "none", md: "table-cell" }} borderColor='gray.500' fontSize="l" w="20vw">Operation type</Th>
                         <Th borderColor='gray.500' fontSize="l">Timestamp</Th>
                         <Th borderColor='gray.500' fontSize="l" isNumeric>Amount</Th>
                     </Tr>

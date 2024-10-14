@@ -119,7 +119,7 @@ function UserList( {users, setChosenUser, onDelete} ) {
             <Table>
                 <Thead>
                     <Tr>
-                        <Th borderColor='gray.500'></Th>
+                        <Th borderColor='gray.500' w="8vw"></Th>
                         <Th borderColor='gray.500' fontSize="l">Email</Th>
                         <Th borderColor='gray.500' fontSize="l">Creation time</Th>
                         <Th borderColor='gray.500' fontSize="l">Is active</Th>

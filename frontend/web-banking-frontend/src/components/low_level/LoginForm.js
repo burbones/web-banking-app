@@ -70,7 +70,7 @@ export default function LoginForm() {
                           disabled={isSubmitting}
                           colorScheme='purple'
                           >
-                          Submit
+                          Log in
                       </Button>
                   </Center>
                   <Center>
