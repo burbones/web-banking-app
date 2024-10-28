@@ -29,7 +29,7 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-        if (selection !== -1) { 
+        if (selection !== "") {
             const params = {
                 page,
                 periodStart: getStart(selection),
@@ -96,7 +96,7 @@ function TransactionList(props) {
                     maxWidth={{ base: "30%", md: "20%" }}
                     bg={useColorModeValue('purple.100')}
                     onChange={(e) => props.changeSelection(e.target.value)}
-                    defaultValue={-1}
+                    defaultValue=""
                 >
                     <option value='day'>Day</option>
                     <option value='week'>Week</option>
@@ -198,7 +198,7 @@ function getStart(selection) {
             return new Date(0);
         }
         default: {
-            return d;
+            return -1;
         }
     }
 }

@@ -23,7 +23,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-//app.use(express.static('build'));
+// app.use(express.static('public'));
 
 const logger = require('./utils/logger');
 

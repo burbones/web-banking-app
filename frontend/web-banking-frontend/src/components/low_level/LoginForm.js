@@ -37,6 +37,7 @@ export default function LoginForm() {
           const user = values.email;
           axios.post(SERVER_LOGIN_URL,values)
             .then((res) => {
+              console.log(res.data.token);
               dispatch(setUser({user: user, token: res.data.token}));
               if (res.data.isAdmin) {
                 navigate(ADMIN_USERS_URL);
