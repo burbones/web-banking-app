@@ -23,6 +23,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+//app.use(express.static('build'));
+
 const logger = require('./utils/logger');
 
 const baseURL = "/api/v1";

@@ -4,7 +4,7 @@ import { InputControl } from "formik-chakra-ui";
 
 import loginPic from "../../img/login.png";
 import axios from "axios";
-import { DASHBOARD_URL, SERVER_LOGIN_URL, SIGNUP_URL } from "../../utils/constants";
+import { ADMIN_USERS_URL, DASHBOARD_URL, SERVER_LOGIN_URL, SIGNUP_URL } from "../../utils/constants";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../authSlice";
 import { useNavigate } from "react-router-dom";
@@ -37,8 +37,12 @@ export default function LoginForm() {
           const user = values.email;
           axios.post(SERVER_LOGIN_URL,values)
             .then((res) => {
-              dispatch(setUser({user: user, token: res.data}));
-              navigate(DASHBOARD_URL);
+              dispatch(setUser({user: user, token: res.data.token}));
+              if (res.data.isAdmin) {
+                navigate(ADMIN_USERS_URL);
+              } else {
+                navigate(DASHBOARD_URL);
+              }
             })
             .catch((error) => {
               setErrorMessage(error.response.data.error);

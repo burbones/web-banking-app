@@ -23,7 +23,8 @@ const login = async (req, res) => {
         } else {
             const token = jwt.sign({email: curUser.email}, secretKey, { expiresIn: timeToExpireJWT});
             logger.info({user: curUser}, "New login");
-            res.status(200).json(token);
+            isAdmin = (curUser.email === process.env.ADMIN_EMAIL);
+            res.status(200).json({token, isAdmin});
         }
 
     } catch (error) {
